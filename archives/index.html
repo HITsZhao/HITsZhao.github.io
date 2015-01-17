@@ -74,6 +74,81 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Python-函数（1）" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/17/Python-函数（1）/" class="article-date">
+  <time datetime="2015-01-17T14:11:17.000Z" itemprop="datePublished">Jan 17 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近整理了一下Python使用经验，希望对于脑海中Python函数的相关知识进行一下梳理。<br>因为内容可能会比较多，所以分成若干篇来写，尽量保证篇与篇之间的独立性。</p>
+<p>遵循以下几点要求：<br>1、整体的思路就是由浅入深，每个段落采用结论+解释的结构。<br>2、不求大而全，只涉及要害部分。<br>3、具体语法的部分要回答的问题只有一个：<em>当我这么做时，发生了什么</em>。<br>4、Keep it simple</p>
+<p>好啦，开工。<br>———————————-傲娇的分割线————————————</p>
+<blockquote>
+<p>尽可能的增加代码的复用，降低代码的冗余</p>
+</blockquote>
+<h2 id="关于函数">关于函数</h2>
+<p>抛开具体的编程语言，函数是一种近乎通用的代码结构，在各种编程语言中都能找到。写代码时采用函数一般是基于以下两个目的：<br><strong>1. 减少重复劳动</strong><br>对于程序员而言，应当学会“偷懒”。聪明的程序员们发明了很多用于偷懒的工具。函数则是最常用也是最好用的工具。<br><strong>2. 分解问题</strong><br>面对复杂问题最常用的思路就是将复杂的问题分解为简单的子问题。函数在事实上扮演了分解问题的工具角色。设计函数的实质是分解问题。</p>
+<p>不同的编程语言对于函数的表达形式不尽相同，本文总结<strong>Python</strong>中是如何表达及使用<strong>函数</strong>的。</p>
+<h2 id="Python中的函数">Python中的函数</h2>
+<blockquote>
+<p>Python中的函数也是对象，这是理解Python函数的关键</p>
+</blockquote>
+<h3 id="1-如何定义函数">1.如何定义函数</h3>
+<p>python中定义函数的通用格式如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">name</span><span class="params">(arg1,arg2,...argN)</span>:</span></div><div class="line">    statements</div></pre></td></tr></table></figure>
+
+<p>举例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(x, y)</span>:</span></div><div class="line">    <span class="keyword">return</span> x + y</div></pre></td></tr></table></figure>
+
+<p>在上述例子中，使用def表达式时，发生了两件事：<br>（1）定义了一个函数对象；<br>（2）变量foo“绑定”到该函数对象上；</p>
+<p>这样，我们就可以使用foo来指代这个函数对象。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> foo</span></div><div class="line">&lt;function foo at <span class="number">0x7fd967700398</span>&gt;</div></pre></td></tr></table></figure>
+
+<p>当然也可以为该函数对象“绑定”多个变量。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> foo_alias = foo</span></div></pre></td></tr></table></figure>
+
+<p>由于Python的函数也是对象，可以使用python中内置的<a href="https://docs.python.org/2/library/functions.html#type" target="_blank" rel="external">type()</a>函数查看类型</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; def foo(x,y):</div><div class="line"><span class="keyword">...</span>     <span class="keyword">return</span> x + y</div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; type(foo)</div><div class="line">&lt;type <span class="string">'function'</span>&gt;</div></pre></td></tr></table></figure>
+
+<p><strong>关于def表达式的执行</strong><br>Python是动态语言（但是属于强类型），所以，def表达式是<strong>可执行的声明</strong>:当执行到该语句时，发生两件事：<br>（1）创建一个新的函数对象；（2）给这个函数对象赋一个名字；<br>这都是在运行时(runtime)发生的（区别静态语言的编译时(compile time)）。<br>因为def表达式是<strong>可执行的声明</strong>,所以，<strong>它可以在任何表达式可以出现的地方使用</strong>，这点和静态语言区别比较大：<br>举例：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(x)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(y)</span>:</span></div><div class="line">        <span class="keyword">return</span> x + y</div><div class="line">    <span class="keyword">return</span> foo</div></pre></td></tr></table></figure>
+
+<p>这是Python中实现<strong>闭包</strong>(<a href="http://en.wikipedia.org/wiki/Closure_%28computer_programming%29" target="_blank" rel="external">closure</a>)的代码。不管闭包的事情，先看看<strong>def 如何在表达式可以出现的地方使用</strong>:<br>因为定义函数时，函数体是statments，所以，def foo表达式可以出现在index的函数体中，也就出现了例子中的函数嵌套的形式。</p>
+<hr>
+<p><em>由例子引出的关于函数对象的一个小说明:</em><br>由于Python中函数是对象，所以上例中</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(y)</span>:</span></div><div class="line">    <span class="keyword">return</span> x + y</div></pre></td></tr></table></figure>
+
+<p>定义的函数foo是一个函数对象，既然是对象，那么就可以和正常的对象一样使用，在上例中，foo作为函数对象index的返回值使用，也就是说，当执行下述语句的时候：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;func = index(<span class="number">8</span>)</div><div class="line">&gt;&gt;&gt; <span class="typedef"><span class="keyword">type</span><span class="container">(<span class="title">func</span>)</span></span></div><div class="line">&lt;<span class="typedef"><span class="keyword">type</span> 'function'&gt;</span></div></pre></td></tr></table></figure>
+
+<p>变量func代表是 foo 函数对象。<br>对于对象，我们可以动态设置其属性（区别静态语言）：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> func.name = <span class="string">'I am a foo function object'</span></span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> func.name</span></div><div class="line"><span class="string">'I am a foo function object'</span></div></pre></td></tr></table></figure>
+
+<hr>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/01/17/Python-函数（1）/" data-id="w5vhesyjwtxzaco6" class="article-share-link" data-share="baidu">Share</a>
+      
+
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/01/14/hello-world/" class="article-date">
@@ -147,7 +222,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">2</span></li></ul>
     </div>
   </div>
 
@@ -157,6 +232,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/01/17/Python-函数（1）/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2015/01/14/hello-world/">Hello World</a>
