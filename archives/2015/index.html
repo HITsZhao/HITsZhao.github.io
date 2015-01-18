@@ -74,10 +74,131 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post-Python-函数（1）" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Python-function-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/01/17/Python-函数（1）/" class="article-date">
-  <time datetime="2015-01-17T14:11:17.000Z" itemprop="datePublished">Jan 17 2015</time>
+    <a href="/2015/01/18/Python-function-2/" class="article-date">
+  <time datetime="2015-01-18T05:53:22.000Z" itemprop="datePublished">Jan 18 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>这篇主要总结Python函数参数传递。</p>
+<h3 id="背景">背景</h3>
+<p>函数的参数传递方式常见的有三种：<br>1、传值调用；<br>2、传指针调用；<br>3、传引用调用；<br>这种划分方式并不严格，因为传指针调用实质就是传值，但是，传指针调用实现的功能与传引用调用相同</p>
+<p>我们从实现的角度来划分，有以下两种：<br>1、将实参拷贝一份到函数作用域；<br>2、不拷贝实参，而是将获取实参数据的途径（指针或引用）传入函数，使用时，直接操作实参。</p>
+<p>从上面总结的两点，可以有以下观点：<br>1、方式1不会操作原数据，方式2会操作原数据<br>2、对于小数据量（例如，基本数据类型）而言，通常选择方式1<br>3、对于大数据量（例如，对象实例）而言，通常选择方式2</p>
+<p>另外，从函数设计的原则上讲：在选择方式2时尽量避免改变原始数据，除非功能上有必要。<br>当然，这只是原则，是否遵守全在程序员自己把握。</p>
+<hr>
+<p>好了，絮絮叨叨一堆，终于进入正题：<br>———————————傲娇的分割线————————————</p>
+<blockquote>
+<p>Python一切皆对象，参数皆引用</p>
+</blockquote>
+<p>不太记得这句话的出处了，但是理解这句话对于理解Python函数参数传递很有帮助</p>
+<h3 id="1-_Python的可变对象与不可变对象">1. Python的可变对象与不可变对象</h3>
+<p>首先，摘抄<a href="https://docs.python.org/2/reference/datamodel.html" target="_blank" rel="external">Python官方文档</a>中的一段话来给出可变对象和不可变对象的定义：</p>
+<blockquote>
+<p>Objects whose value can change are said to be <em>mutable</em>;<br> objects whose value is unchangeable once they are created are called <em>immutable</em>.</p>
+</blockquote>
+<p>OK，既然Python中一切皆对象，而对象又可以分为mutable和immutable，那么，我们可以对Python中常见的对象类型按照是否可变进行划分：</p>
+<table>
+<thead>
+<tr>
+<th>immutable</th>
+<th style="text-align:center">mutable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Number</td>
+<td style="text-align:center">Lists</td>
+</tr>
+<tr>
+<td>Strings</td>
+<td style="text-align:center">Dictionaries</td>
+</tr>
+<tr>
+<td>Tuples</td>
+<td style="text-align:center"></td>
+</tr>
+<tr>
+<td>Frozen sets</td>
+<td style="text-align:center">Sets</td>
+</tr>
+</tbody>
+</table>
+<p>Python 中还有其他对象类型，比如：functions，Classes，可以<strong>简单的</strong>认为属于mutable类型</p>
+<p>举例：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt"># 以List为例展示mutable对象</span></span></div><div class="line">&gt;&gt;&gt; a = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]   <span class="comment"># 创建了一个List对象，值为1,2,3，名字是a</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> b = a         <span class="comment"># 为新创建的对象赋一个新变量b</span></span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> a</span></div><div class="line"><span class="input"><span class="prompt">[1, 2, 3]</span></span></div><div class="line">&gt;&gt;&gt; b</div><div class="line"><span class="input"><span class="prompt">[1, 2, 3]</span></span></div><div class="line">&gt;&gt;&gt; b[<span class="number">0</span>] = <span class="number">0</span>      <span class="comment"># 通过b改变List对象内的值</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> b</span></div><div class="line"><span class="input"><span class="prompt">[0, 2, 3]</span></span></div><div class="line">&gt;&gt;&gt; a             <span class="comment"># 可以看到创建的List对象发生了变化</span></div><div class="line"><span class="input"><span class="prompt">[0, 2, 3]</span></span></div><div class="line"># 以Tuple为例展示immutable对象不可修改</div><div class="line">&gt;&gt;&gt; c = (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> c[<span class="number">0</span>] = <span class="number">0</span></span></div><div class="line"><span class="constant">Traceback</span> (most recent call last)<span class="symbol">:</span></div><div class="line">  <span class="constant">File</span> <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></div><div class="line"><span class="constant">TypeError</span><span class="symbol">:</span> <span class="string">'tuple'</span> object does <span class="keyword">not</span> support item assignment</div></pre></td></tr></table></figure>
+
+<p><strong>Tips:</strong> 有一点需要说明一下：<br>由于在动态语言中，变量“绑定”的对象是动态的，所以，下面的例子不能作为immutable不可变的反例：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> i = <span class="number">50</span></span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> i += <span class="number">2</span></span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> i</span></div><div class="line"><span class="number">52</span></div></pre></td></tr></table></figure>
+
+<p>原因在于 </p>
+<figure class="highlight i"><figcaption><span>= 50``` 和 ```i +=2``` 中 ```i``` 的所“绑定”的对象不同：当执行 ```i +=2``` 时 ```i``` 所表示的对象从 ```Number``` 型的对象 ```50```，变成了 ```Number``` 型的对象 ```52``` 。</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Python的内置函数[<span class="link_label">id()</span>](<span class="link_url">https://docs.python.org/2/library/functions.html#id</span>)可以查看对象的identity，下述例子可以说明，</div></pre></td></tr></table></figure>
+
+<p>i</p>
+<figure class="highlight “绑定”的对象是不同的。"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">```</span></span></div><div class="line">&gt;&gt;&gt; i = <span class="number">50</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> id(i)</span></div><div class="line"><span class="input"><span class="prompt">26607512</span></span></div><div class="line">&gt;&gt;&gt; i += <span class="number">2</span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> id(i)</span></div><div class="line"><span class="number">26607464</span></div></pre></td></tr></table></figure>
+
+<h3 id="2-_Python函数参数传递">2. Python函数参数传递</h3>
+<blockquote>
+<p>Python的函数参数传递方式是传引用调用</p>
+</blockquote>
+<p>Python的函数参数传递方式只有一种：传引用调用。<br>既然只有一种，那还有什么可讨论的呢？<br>虽然Python的函数参数传递方式只有一种，但是由于Python中的对象分immutable和mutable，造成在<strong>效果上</strong>出现了两种：传值调用和传引用调用。<br>这也是容易造成误解的地方：认为Python有两种参数传递方式。</p>
+<p>1、首先用例子解释一下：<strong>当传递的参数是不可变对象时，效果相当于传值调用</strong>：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; x = <span class="number">6</span></div><div class="line">&gt;&gt;&gt; def foo(y):</div><div class="line"><span class="keyword">...</span>     y = <span class="number">7</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; foo(x)</div><div class="line">&gt;&gt;&gt; x</div><div class="line"><span class="number">6</span></div></pre></td></tr></table></figure>
+
+<p>可以看到，变量</p>
+<figure class="highlight x```并未发生变化，这**在效果上**与传值调用是一样的。但是，对于Python而言，实际发生的情况并不是传值调用，而是等效于下述代码："><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">```</div><div class="line">&gt;&gt;&gt;<span class="variable">x =</span> <span class="number">6</span></div><div class="line">&gt;&gt;&gt;<span class="variable">y =</span> x    <span class="comment"># 等价与foo(x)</span></div><div class="line">&gt;&gt;&gt;<span class="variable">y =</span> <span class="number">7</span>    <span class="comment"># 等价于执行foo函数中的y=7</span></div><div class="line">&gt;&gt;&gt;x</div><div class="line"><span class="number">6</span></div></pre></td></tr></table></figure>
+
+<p>2、用例子解释：<strong>当传递的参数是可变对象时，效果相当于传引用调用</strong></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; x = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</div><div class="line">&gt;&gt;&gt; def foo(y):</div><div class="line"><span class="keyword">...</span>     y[<span class="number">0</span>] = <span class="number">0</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; foo(x)</div><div class="line">&gt;&gt;&gt; x</div><div class="line">[<span class="number">0</span>, <span class="number">2</span>, <span class="number">3</span>]</div></pre></td></tr></table></figure>
+
+<p>可以看到在函数</p>
+<figure class="highlight foo```中对传入的list对象x的数据进行改变，这在效果上与传引用调用是一致的。"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">但是，需要注意下面这种情况：</div></pre></td></tr></table></figure>
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p>x = [1,2,3]<br>def foo(y):<br>…     y = [0,1,2]    #这里y重新“绑定”了新的List对象<br>…<br>foo(x)<br>x<br>[1, 2, 3]</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">在上例中，函数</div></pre></td></tr></table></figure>
+
+<p>foo<code>内部变量</code>y```发生了重新“绑定”，因此不能该达到改变原数据的目的</p>
+<hr>
+<p><strong>总结要点:</strong><br>在使用Python函数的参数传递时，确定是否改变原数据需要注意两点：</p>
+<ol>
+<li>传入的实参是可变对象(mutable object)还是不可变对象(immutable object)</li>
+<li>函数的形参是否发生“重绑定”的情况。</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/01/18/Python-function-2/" data-id="7tf488rey91v1utp" class="article-share-link" data-share="baidu">Share</a>
+      
+
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-Python-function-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/17/Python-function-1/" class="article-date">
+  <time datetime="2015-01-17T14:13:39.000Z" itemprop="datePublished">Jan 17 2015</time>
 </a>
     
   </div>
@@ -136,7 +257,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/01/17/Python-函数（1）/" data-id="w5vhesyjwtxzaco6" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/01/17/Python-function-1/" data-id="3hx38cwanz3m1b5y" class="article-share-link" data-share="baidu">Share</a>
       
 
       
@@ -222,7 +343,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">2</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">3</span></li></ul>
     </div>
   </div>
 
@@ -234,7 +355,11 @@
       <ul>
         
           <li>
-            <a href="/2015/01/17/Python-函数（1）/">(no title)</a>
+            <a href="/2015/01/18/Python-function-2/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2015/01/17/Python-function-1/">(no title)</a>
           </li>
         
           <li>
