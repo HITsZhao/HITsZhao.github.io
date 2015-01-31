@@ -4,32 +4,32 @@
 <head>
   <meta charset="utf-8">
   
-  <title>_Zhao_</title>
+  <title>Python一个关于类属性及实例属性的小问题的探讨 | _Zhao_</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="title: [Python]一个关于类属性及实例属性的小问题的探讨
-
-标题名字有点长。之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。
+  <meta name="description" content="标题名字有点长。之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。
 
 性子急的可以直接跳到最后看总结。原帖子地址
-问题描述">
+问题描述
+为了方便对比，我还是使用原帖子的例子：
+12345678910111">
 <meta property="og:type" content="article">
-<meta property="og:title" content="_Zhao_">
+<meta property="og:title" content="Python一个关于类属性及实例属性的小问题的探讨">
 <meta property="og:url" content="http://yoursite.com/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">
 <meta property="og:site_name" content="_Zhao_">
-<meta property="og:description" content="title: [Python]一个关于类属性及实例属性的小问题的探讨
-
-标题名字有点长。之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。
+<meta property="og:description" content="标题名字有点长。之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。
 
 性子急的可以直接跳到最后看总结。原帖子地址
-问题描述">
+问题描述
+为了方便对比，我还是使用原帖子的例子：
+12345678910111">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="_Zhao_">
-<meta name="twitter:description" content="title: [Python]一个关于类属性及实例属性的小问题的探讨
-
-标题名字有点长。之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。
+<meta name="twitter:title" content="Python一个关于类属性及实例属性的小问题的探讨">
+<meta name="twitter:description" content="标题名字有点长。之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。
 
 性子急的可以直接跳到最后看总结。原帖子地址
-问题描述">
+问题描述
+为了方便对比，我还是使用原帖子的例子：
+12345678910111">
 
   
     <link rel="alternative" href="/atom.xml" title="_Zhao_" type="application/atom+xml">
@@ -90,17 +90,26 @@
       <section id="main"><article id="post-Python一个关于类属性及实例属性的小问题的探讨" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/" class="article-date">
-  <time datetime="2015-01-31T00:24:25.000Z" itemprop="datePublished">Jan 31 2015</time>
+  <time datetime="2015-01-31T00:26:18.000Z" itemprop="datePublished">Jan 31 2015</time>
 </a>
     
   </div>
   <div class="article-inner">
     
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python一个关于类属性及实例属性的小问题的探讨
+    </h1>
+  
+
+      </header>
+    
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="title:_[Python]一个关于类属性及实例属性的小问题的探讨">title: [Python]一个关于类属性及实例属性的小问题的探讨</h2>
-<hr>
+        <hr>
 <p>标题名字有点长。<br>之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。</p>
 <hr>
 <p>性子急的可以直接跳到最后看总结。<br><a href="http://bluecrystal.iteye.com/blog/234923" target="_blank" rel="external">原帖子地址</a></p>
@@ -206,7 +215,7 @@
       <ul>
         
           <li>
-            <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">(no title)</a>
+            <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
           </li>
         
           <li>
