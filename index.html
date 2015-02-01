@@ -74,6 +74,86 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Python的属性搜索" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/02/01/Python的属性搜索/" class="article-date">
+  <time datetime="2015-02-01T04:45:45.000Z" itemprop="datePublished">Feb 1 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>这是我总结的Python属性搜索的<em>加长版</em>，完整的描述了Python在做属性访问时的过程。<br>了解Python属性搜索的整个过程，有助于更深入地理解Python属性访问。</p>
+<hr>
+<h3 id="1-_对Python中属性和方法的看法">1. 对Python中属性和方法的看法</h3>
+<p>理解Python时有一点很重要：<strong>一切皆对象</strong>。<br>为什么呢？<br>先看个例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>    clsattr = <span class="string">'this is class attribute'</span></div><div class="line"><span class="keyword">...</span>    def clsmethod(self):</div><div class="line"><span class="keyword">...</span>        print <span class="string">'this is method'</span></div></pre></td></tr></table></figure>
+
+<p>在这个例子中，定义了<code>class Foo</code>。<br>通常我们称<code>clsattr</code>为<strong>属性</strong>，<code>clsmethod</code>为<strong>方法</strong>。<br>这种叫法容易造成一种误会：认为对于类来说属性和方法是两种东西。<br>其实，由于在Python中一切皆对象，所以，拿上例来说，<code>clsattr</code>是<code>Foo</code>的一个<code>str</code>类型对象，而<code>clsmethod</code>是<code>Foo</code>的一个<code>function</code>类型对象。<br>也就是对于<code>Foo</code>来讲，<code>clsattr</code>和<code>clsmethod</code>都是对象，除了类型不同，其他的没有什么不一样。<br>这是一个看法上的细微区别，但是对后面理解Python的属性搜索却很重要。</p>
+<h3 id="2-_Python属性搜索的精简版">2. Python属性搜索的<em>精简版</em></h3>
+<p>Python存在类对象和实例对象之分：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>    clsattr = <span class="string">'this is class attribute'</span></div><div class="line"><span class="keyword">...</span>    def clsmethod(self):</div><div class="line"><span class="keyword">...</span>        print <span class="string">'this is method'</span></div><div class="line"><span class="keyword">...</span></div><div class="line">&gt;&gt;&gt; f = Foo()</div></pre></td></tr></table></figure>
+
+<p>在这个例子中<code>Foo</code>是类对象，<code>f</code>是实例对象。<br>但是我们知道，在OOP的理论中，类是抽象描述，实例是其具象。Python支持OOP，所以，也能通过自己的方式来<strong><em>“模拟并实现”</em></strong> OOP的要求。<br>其中最重要的就是属性搜索规则。<br>当不考虑<a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">描述符/描述器</a>的时候，可以将Python属性搜索精简如下：</p>
+<ol>
+<li>Python的属性搜索是按照继承树从下到上进行的。</li>
+<li>继承树以类对象为中心，向上是其基类，向下是其实例对象。</li>
+<li>当通过<strong><em>实例.属性</em></strong>的形式访问某属性时，首先查找实例对象自身是否存在该属性，如果存在，那么直接返回；如果不存在，那么向上查找，直到找到为止，否则返回异常。</li>
+</ol>
+<p>还是拿上面的例子来说明：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> f.__dict_<span class="number">_</span></span></div><div class="line"><span class="input"><span class="prompt">{}</span></span></div><div class="line">&gt;&gt;&gt; <span class="constant">Foo</span>.__dict_<span class="number">_</span></div><div class="line">dict_proxy({<span class="string">'__module__'</span><span class="symbol">:</span> <span class="string">'__main__'</span>, <span class="string">'clsattr'</span><span class="symbol">:</span> <span class="string">'clsattr'</span>, <span class="string">'__dict__'</span><span class="symbol">:</span> &lt;attribute <span class="string">'__dict__'</span> of <span class="string">'Foo'</span> objects&gt;, <span class="string">'foo'</span><span class="symbol">:</span> &lt;function foo at <span class="number">0x7f2a86c31cf8</span>&gt;, <span class="string">'__weakref__'</span><span class="symbol">:</span> &lt;attribute <span class="string">'__weakref__'</span> of <span class="string">'Foo'</span> objects&gt;, <span class="string">'__doc__'</span><span class="symbol">:</span> <span class="constant">None</span>})</div></pre></td></tr></table></figure>
+
+<p>Python中对象通过<code>__dict__</code>内置属性来动态管理其所有属性。<code>__dict__</code>是一个字典，其内部为对象所有属性名与属性对象的对应关系。<br>可以看到<code>clsattr</code>在类对象<code>Foo</code>中存在，在实例对象<code>f</code>中不存在。<br>因此，当通过<code>f.clsattr</code>的形式访问属性<code>clsattr</code>的时候，首先，查找实例对象<code>f</code>，没有找到，所以继续向上查找，于是查找类对象<code>Foo</code>，找到，返回其值。</p>
+<p>按照这个规则，如果<code>f</code>中存在<code>clsattr</code>属性，则不会去查找<code>Foo</code>，即：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> f.clsattr = <span class="string">'this is an instance attr'</span></span></div><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> f.__dict_<span class="number">_</span></span></div><div class="line"><span class="input"><span class="prompt">{'clsattr': 'this is an instance attr'}</span></span></div><div class="line">&gt;&gt;&gt; f.clsattr</div><div class="line"><span class="string">'this is an instance attr'</span></div></pre></td></tr></table></figure>
+
+<p>OK，了解了<strong><em>精简版</em></strong> 的属性搜索规则，再来看看<strong><em>加长版</em></strong> 的规则。</p>
+<h3 id="3-_Python属性搜索的加长版">3. Python属性搜索的<em>加长版</em></h3>
+<p>正如上面提到的，在不考虑<a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">描述符/描述器</a>的时候，才可以按照精简版的规则来，那么考虑到描述符的时候呢？<br>关于描述符就不详细展开了。简单的说，描述符就是一个实现了<strong><em>描述符协议</em></strong> 的类。<br>描述符协议包括<code>__get__</code>、<code>__set__</code>、<code>__delete__</code>方法。<br>其中，只实现了<code>__get__</code>方法的描述符称为<strong>non-data descriptor</strong>；<br>而实现了<code>__get__</code>和<code>__set__</code>方法的描述符称为<strong>data descriptor</strong>；</p>
+<p>当把类的一个属性为描述符这种特殊的对象时，会发生一件神奇的事情：<br>Python在类的<code>__dict__</code>中找到的对象如果拥有<code>__get__()</code>方法，不会直接返回这个对象，而是返回其调用<code>__get__()</code>方法后的结果<br><strong>注意</strong>：这里特别要强调是类的属性，不是实例的属性。<br>举例说明：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>    clsattr = Descriptor()         <span class="comment"># 假设Descriptor是自定义的描述符</span></div><div class="line"><span class="keyword">...</span>    def func(self):</div><div class="line"><span class="keyword">...</span>        print <span class="string">'this is func'</span></div><div class="line"><span class="keyword">...</span></div></pre></td></tr></table></figure>
+
+<p>那么当调用<code>Foo.__dict__[&#39;clsattr&#39;]</code>时，由于<code>clsattr</code>是描述符，所以，返回的是<code>Foo.__dict__[&#39;clsattr&#39;].__get__(None, Foo)</code><br>这个时候，有趣的事情就来了，当调用函数<code>func</code>即<code>Foo.__dict__[&#39;func&#39;]</code>时，返回的是<code>Foo.__dict__[&#39;func&#39;].__get__(None, Foo)</code>, 在命令行中这是一个<code>unbound method</code></p>
+<p>所以，<strong>在Python中函数其实是一个描述符</strong>，只不过，由于<strong>描述符必须在通过属性访问的情况下才起作用</strong>，所以，并没有察觉。</p>
+<p>看到这里，可能你已经恍然大悟：其实方法只是一个特殊的属性而已。</p>
+<p>好了，理解到这里，就可以说说<strong>属性搜索<em>加长版</em></strong>：</p>
+<ol>
+<li>当通过<strong>实例.属性</strong>访问一个属性时，首先，从其<strong>类对象开始向上查找</strong>，如果<strong>存在并且是data-descriptor</strong>，那么返回查找结果；否则，进行步骤2</li>
+<li>在实例中查找属性是否存在，如果存在，则返回其值，否则，进行步骤3</li>
+<li>向上查找，直到找到，返回其值，否则，返回异常</li>
+</ol>
+<p>由于描述符只能是类属性，所以，可以有以下结论：</p>
+<ol>
+<li>data descriptor对于同名的实例属性（非描述器）有屏蔽作用：<br>例如：</li>
+</ol>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#!/usr/bin/env python</span></div><div class="line"><span class="comment"># -*- conding: utf-8 -*-</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RevealAccess</span><span class="params">(object)</span>:</span></div><div class="line">    <span class="string">"""A data descriptor that sets and returns values</span></div><div class="line">       normally and prints a message logging their access.</div><div class="line">    """</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, initval=None, name=<span class="string">'var'</span>)</span>:</span></div><div class="line">        self.val = initval</div><div class="line">        self.name = name</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__get__</span><span class="params">(self, obj, objtype)</span>:</span></div><div class="line">        <span class="keyword">print</span> <span class="string">'Retrieving'</span>, self.name, self.val</div><div class="line">        <span class="keyword">return</span> self.val</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__set__</span><span class="params">(self, obj, val)</span>:</span></div><div class="line">        <span class="keyword">print</span> <span class="string">'Updating'</span>, self.name, self.val </div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">Foo</span><span class="params">(object)</span>:</span></div><div class="line">    attr = RevealAccess(<span class="number">10</span>, <span class="string">'var "x"'</span>)      <span class="comment">#设置类属性attr为描述符</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></div><div class="line">        self.attr = <span class="number">20</span>        <span class="comment">#调用描述符的__set__方法，而不是为实例设置属性</span></div><div class="line"></div><div class="line">f = Foo()</div><div class="line"><span class="keyword">print</span> f.attr</div></pre></td></tr></table></figure>
+
+<p>执行结果如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Updating <span class="keyword">var</span> <span class="string">"x"</span> <span class="number">10</span></div><div class="line">Retrieving <span class="keyword">var</span> <span class="string">"x"</span> <span class="number">10</span></div><div class="line"><span class="number">10</span></div></pre></td></tr></table></figure>
+
+<p>2.non-data descriptor对于同名的属性，会被屏蔽掉。这一点与正常的类属性相同。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/02/01/Python的属性搜索/" data-id="d7g3dh8nlw5pjplp" class="article-share-link" data-share="baidu">Share</a>
+      
+
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python一个关于类属性及实例属性的小问题的探讨" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/" class="article-date">
@@ -166,118 +246,6 @@
 
 
   
-    <article id="post-Python-Unbound-Bound-method-object" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/01/31/Python-Unbound-Bound-method-object/" class="article-date">
-  <time datetime="2015-01-31T00:23:42.000Z" itemprop="datePublished">Jan 31 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/31/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>本篇主要总结Python中<strong>绑定方法对象</strong>（Bound method object）和<strong>未绑定方法对象</strong>（Unboud method object）的区别和联系。<br>主要目的是分清楚这两个极容易混淆的概念，顺便将Python的静态方法，类方法及实例方法加以说明</p>
-<hr>
-<p>OK，下面开始</p>
-<h3 id="1-_一个方法引发的“血案”">1. 一个方法引发的<em>“血案”</em></h3>
-<blockquote>
-<p>类中所定义的函数称为方法</p>
-</blockquote>
-<p>举例：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;class Foo(object):</div><div class="line"><span class="keyword">...</span>        def  foo():</div><div class="line"><span class="keyword">...</span>            print <span class="string">'call foo'</span></div></pre></td></tr></table></figure>
-
-<p>然后令人困惑的地方就来了：<br>当你尝试使用<strong>类名.方法名</strong>调用函数foo时，会出现如下错误</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="type">Foo</span>.foo()</div><div class="line"><span class="type">Traceback</span> (most recent call last):</div><div class="line">  <span class="type">File</span> <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line"><span class="type">TypeError</span>: unbound <span class="keyword">method</span> foo() must be called <span class="keyword">with</span> <span class="type">Foo</span> instance <span class="keyword">as</span> first argument (got nothing instead)</div></pre></td></tr></table></figure>
-
-<p>看一下报错信息发现需要一个<code>Foo</code>的实例(instance)来调用，OK，于是调用如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>().foo()</span></div><div class="line"><span class="constant">Traceback</span> (most recent call last)<span class="symbol">:</span></div><div class="line">  <span class="constant">File</span> <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></div><div class="line"><span class="constant">TypeError</span><span class="symbol">:</span> foo() takes no arguments (<span class="number">1</span> given)</div></pre></td></tr></table></figure>
-
-<p>-.-!!!<br>估计脾气不好的看到做到这里想要骂街了。<br>因为从字面上看<code>Foo( ).foo( )</code>并没有传递任何参数，而报错信息却显示<code>(1 given)</code>。</p>
-<p><strong>在Python中一切皆对象</strong>，<strong>方法是函数</strong>，所以我们来仔细查看一下<strong>函数对象</strong><code>foo</code></p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="type">Foo</span>.foo</div><div class="line">&lt;unbound <span class="keyword">method</span> <span class="type">Foo</span>.foo&gt;</div><div class="line">&gt;&gt;&gt; <span class="type">Foo</span>().foo</div><div class="line">&lt;bound <span class="keyword">method</span> <span class="type">Foo</span>.foo <span class="keyword">of</span> &lt;__main__.<span class="type">Foo</span> <span class="keyword">object</span> at <span class="number">0x7ff33b424d50</span>&gt;&gt;</div></pre></td></tr></table></figure>
-
-<p>咦～，发现一个有趣的现象：<br><strong>通过类名<code>Foo</code>获取类函数属性<code>foo</code>时，得到的是unbound method object</strong>，<strong>通过实例<code>Foo()</code>获取类的函数属性<code>foo</code>时，得到的是bound method object</strong>。<br>在来看看这两个对象的类型：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="typedef"><span class="keyword">type</span><span class="container">(<span class="type">Foo</span>.<span class="title">foo</span>)</span></span></div><div class="line">&lt;<span class="typedef"><span class="keyword">type</span> 'instancemethod'&gt;</span></div><div class="line">&gt;&gt;&gt; <span class="typedef"><span class="keyword">type</span><span class="container">(<span class="type">Foo</span>()</span>.foo)</span></div><div class="line">&lt;<span class="typedef"><span class="keyword">type</span> 'instancemethod'&gt;</span></div></pre></td></tr></table></figure>
-
-<p>于是我们产生了更大的疑问：为什么同样是实例方法(instancemethod)，获取方式的不同，会导致获得不同的对象呢？</p>
-<h3 id="2-_bound/unbound_method是怎么来的">2. bound/unbound method是怎么来的</h3>
-<p>下面让我们来一层层揭开这个bound/unbound method的面纱。<br>首先，我们知道，对于类，其属性是存放在<code>__dict__</code>字典中，即：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>.__dict_<span class="number">_</span></span></div><div class="line">dict_proxy({<span class="string">'__dict__'</span><span class="symbol">:</span> &lt;attribute <span class="string">'__dict__'</span> of <span class="string">'Foo'</span> objects&gt;, <span class="string">'__module__'</span><span class="symbol">:</span> <span class="string">'__main__'</span>, <span class="string">'foo'</span><span class="symbol">:</span> &lt;function foo at <span class="number">0x7ff33b42a5f0</span>&gt;, <span class="string">'__weakref__'</span><span class="symbol">:</span> &lt;attribute <span class="string">'__weakref__'</span> of <span class="string">'Foo'</span> objects&gt;, <span class="string">'__doc__'</span><span class="symbol">:</span> <span class="constant">None</span>})</div></pre></td></tr></table></figure>
-
-<p>在其中我们看到了<code>&#39;foo&#39;: &lt;function foo at 0x7ff33b42a5f0&gt;</code>。<br>然后利用字典查看<code>foo</code>：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>.__dict_<span class="number">_</span>[<span class="string">'foo'</span>]</span></div><div class="line">&lt;function foo at <span class="number">0x7ff33b42a5f0</span>&gt;</div></pre></td></tr></table></figure>
-
-<p>可以看到<code>foo</code>是一个函数对象，根据上一小节最后一个例子的信息，我们发现，foo是有<strong><em>绑定行为</em></strong>的。</p>
-<blockquote>
-<p>在Python中使用<strong><a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">描述器</a></strong>（<a href="http://pyzh.readthedocs.org/en/latest/Descriptor-HOW-TO-Guide.html" target="_blank" rel="external">有翻译的链接</a>）来表示具有“绑定”行为的对象属性，使用<strong>描述器协议方法</strong>来控制对具有绑定行为属性的访问，这些描述器协议方法包括：<code>__get__()</code>、<code>__set__()</code>和<code>__delete__()</code>。</p>
-</blockquote>
-<p>根据上面这段难以让人理解的描述，我们可以大胆的猜测，<code>Foo</code>的属性<code>foo</code>是一个描述器，它通过<code>__get__()</code>方法来控制对<code>foo</code>的访问。<br>根据描述器协议方法<code>descr.__get__(self, obj, type=None) --&gt; value</code>，我们尝试如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; Foo.__dict__[<span class="string">'foo'</span>].__get__(None,Foo)</div><div class="line">&lt;unbound <span class="function"><span class="keyword">method</span> <span class="title">Foo</span>.<span class="title">foo</span>&gt;</span></div></pre></td></tr></table></figure>
-
-<p>于是，我们惊讶的看到这个结果竟然与上一小节看到的结果相同！<br>这绝不是偶然。<br>事实上，根据<a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">官方文档</a>的描述，调用<code>Foo.foo</code>时，Python会根据查找链从<code>Foo.__dict__[&#39;foo&#39;]</code>开始，然后查找<code>type(Foo).__dict__[&#39;foo&#39;]</code>，一路向上查找<code>type(Foo)</code>的所有基类。<code>Foo.foo</code>会被转换为<code>Foo.__dict__[&#39;foo&#39;].__get__(None,Foo)</code>。<br>也就是说，我们在代码中使用<code>Foo.foo</code>实际上会被转化成<br><code>Foo.__dict__[&#39;foo&#39;].__get__(None,Foo)</code><br>对于根据描述器协议方法<code>descr.__get__(self, obj, type=None) --&gt; value</code>的参数列表，由于其<code>self</code>参数在这里被赋予了<code>None</code>，所以没有给定实例，因此认为是未绑定(unbound)<br>(当然这是一种便于理解的描述，其根本机制请移步<a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">这里</a>)<br>那么一个很简单的推理就是：如果<code>self</code>参数给定了实例对象，那么，得到的就是bound method，如下。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="type">Foo</span>.__dict__['foo'].__get__(<span class="type">Foo</span>(),<span class="type">Foo</span>)</div><div class="line">&lt;bound <span class="keyword">method</span> <span class="type">Foo</span>.foo <span class="keyword">of</span> &lt;__main__.<span class="type">Foo</span> <span class="keyword">object</span> at <span class="number">0x7ff33b424d50</span>&gt;&gt;</div></pre></td></tr></table></figure>
-
-<p>因此，可以有如下理解：</p>
-<ol>
-<li>当通过类来获取函数属性的时候，得到的是非绑定方法对象</li>
-<li>当通过实例来获取函数属性的时候，得到的是绑定方法对象</li>
-</ol>
-<h3 id="3-_methods,_static_method_and_class_method">3. methods, static method and class method</h3>
-<p>如果有使用Python方法的经验，那么一定注意过<code>self</code>的使用，请看下面这个例子：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>     def foo():</div><div class="line"><span class="keyword">...</span>             print <span class="string">'call foo'</span></div><div class="line"><span class="keyword">...</span>     def foo_one(self):</div><div class="line"><span class="keyword">...</span>             print <span class="string">'call foo_one'</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; Foo.foo()</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: unbound method foo() must be called with Foo instance as first argument (got nothing instead)</div><div class="line">&gt;&gt;&gt; Foo().foo()</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: foo() takes no arguments (<span class="number">1</span> given)</div><div class="line">&gt;&gt;&gt; Foo.foo_one()</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: unbound method foo_one() must be called with Foo instance as first argument (got nothing instead)</div><div class="line">&gt;&gt;&gt; Foo().foo_one()</div><div class="line">call foo_one</div></pre></td></tr></table></figure>
-
-<p>这个例子定义了两个method：<code>foo()</code>和<code>foo_one(self)</code>。<br>可以看到，同样使用<strong>类名.方法名()</strong>调用时，所报的错误相同。但是在使用<strong>实例名.方法名()</strong>调用时，<code>foo_one</code>是可以调用成功的。<br>为什么呢？<br>原因在于当使用<code>Foo().foo_one()</code>调用时，Python做了如下修改：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>.foo_one(<span class="constant">Foo</span>())</span></div><div class="line">call foo_one</div></pre></td></tr></table></figure>
-
-<p>将实例<code>Foo()</code>作为第一个参数传递进去，因此，函数<code>foo_one(self)</code>调用成功。这也解释了为什么<code>Foo().foo()</code>调用不成功。<br>因为<code>foo</code>的定义为<code>foo()</code>，当调用<code>Foo().foo()</code>时，Python做了如下修改：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>.foo(<span class="constant">Foo</span>())</span></div><div class="line"><span class="constant">Traceback</span> (most recent call last)<span class="symbol">:</span></div><div class="line">  <span class="constant">File</span> <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></div><div class="line"><span class="constant">TypeError</span><span class="symbol">:</span> foo() takes no arguments (<span class="number">1</span> given)</div></pre></td></tr></table></figure>
-
-<p>传入了一个参数<code>Foo()</code>，所以会出现<code>foo() takes no arguments (1 given)</code>的错误。<br>我曾经看到有的人把<code>foo()</code>这种参数列表中没有<code>self</code>的方法称为类方法，而把带有<code>self</code>的方法称为实例方法，根据上面的描述可以发现，这种划分是错误的。<br>那么，Python中有没有类方法呢？<br>答案是，有。那么如何定义一个类方法呢？</p>
-<p><strong>Pyhon 类方法</strong><br>还是使用上面的例子</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):          </div><div class="line"><span class="keyword">...</span>     @classmethod                <span class="comment">#定义类方法要点1</span></div><div class="line"><span class="keyword">...</span>     def foo(cls):               <span class="comment">#定义类方法要点2</span></div><div class="line"><span class="keyword">...</span>             print <span class="string">'call foo'</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; Foo.foo()</div><div class="line">call foo</div><div class="line">&gt;&gt;&gt; Foo().foo()</div><div class="line">call foo</div></pre></td></tr></table></figure>
-
-<p>定义类方法需要注意两点：1. 添加<code>@classmethod</code>；2. 添加<code>cls</code>参数<br>这样定义的类方法可以通过<strong>类名.方法名()</strong>的形式调用，也可以通过<strong>实例.方法名()</strong>的形式调用。</p>
-<p>看到这里会发现，在Python中定义方法，总要带两个参数<code>self</code>或者<code>cls</code>。其中通过<code>self</code>限定的method必须使用实例才能调用。<br>那么很自然的一个疑问是，能不能定义不包含<code>self</code>及<code>cls</code>的方法呢？像最开始的例子中<code>foo()</code>那样。答案是有的，办法就是加<code>@staticmethod</code>修饰器。<br>这种被<code>@staticmethod</code>修饰器修饰的方法，称为静态方法</p>
-<p><strong>Python 静态方法</strong><br>除了类方法，还有静态方法，请看下面这个例子：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>     @staticmethod</div><div class="line"><span class="keyword">...</span>     def foo():</div><div class="line"><span class="keyword">...</span>             print <span class="string">'call foo'</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; Foo.foo()</div><div class="line">call foo</div><div class="line">&gt;&gt;&gt; Foo().foo()</div><div class="line">call foo</div></pre></td></tr></table></figure>
-
-<p>静态方法可以通过<strong>类名.方法名()</strong>和<strong>实例.方法名()</strong>的形式调用。<br>查看<code>type</code>结果如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="typedef"><span class="keyword">type</span><span class="container">(<span class="type">Foo</span>.<span class="title">foo</span>)</span></span></div><div class="line">&lt;<span class="typedef"><span class="keyword">type</span> 'function'&gt;</span></div></pre></td></tr></table></figure>
-
-<p>可以看到，静态方法的类型是<code>function</code>，而类方法的类型是<code>instancemethod</code>。</p>
-<h3 id="总结">总结</h3>
-<p>最后来总结一下：<br>从Python方法定义的角度出发，可以分为三种：<br>1.第一个参数是<code>self</code>;<br>2.第一个参数是<code>cls</code>;<br>3.参数既不含<code>self</code>也不含<code>cls</code>的<br>对于第一种方法，必须通过<strong>实例.方法名()</strong>或<strong>类名.方法名(实例)</strong>的形式调用；<br>对于第二种，可以通过<strong>实例.方法名()</strong>或<strong>类名.方法名()</strong>的形式调用，不能通过<strong>类名.方法名(实例)</strong>的形式调用；<br>对于第三种，方法即是普通函数，但是必须通过<strong>实例.方法名()</strong>或<strong>类名.方法名()</strong>的形式调用，不能通过其他形式调用</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/01/31/Python-Unbound-Bound-method-object/" data-id="3cm1rchnl4p2yqf6" class="article-share-link" data-share="baidu">Share</a>
-      
-
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
   
     <nav id="page-nav">
       <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
@@ -297,7 +265,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -307,6 +275,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/02/01/Python的属性搜索/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
@@ -322,10 +294,6 @@
         
           <li>
             <a href="/2015/01/27/Python-函数参数匹配/">Python-函数参数匹配</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/18/Python-function-2/">Python 函数-参数传递</a>
           </li>
         
       </ul>

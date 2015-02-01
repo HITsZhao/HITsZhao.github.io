@@ -74,6 +74,118 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Python-Unbound-Bound-method-object" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/01/31/Python-Unbound-Bound-method-object/" class="article-date">
+  <time datetime="2015-01-31T00:23:42.000Z" itemprop="datePublished">Jan 31 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/01/31/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>本篇主要总结Python中<strong>绑定方法对象</strong>（Bound method object）和<strong>未绑定方法对象</strong>（Unboud method object）的区别和联系。<br>主要目的是分清楚这两个极容易混淆的概念，顺便将Python的静态方法，类方法及实例方法加以说明</p>
+<hr>
+<p>OK，下面开始</p>
+<h3 id="1-_一个方法引发的“血案”">1. 一个方法引发的<em>“血案”</em></h3>
+<blockquote>
+<p>类中所定义的函数称为方法</p>
+</blockquote>
+<p>举例：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;class Foo(object):</div><div class="line"><span class="keyword">...</span>        def  foo():</div><div class="line"><span class="keyword">...</span>            print <span class="string">'call foo'</span></div></pre></td></tr></table></figure>
+
+<p>然后令人困惑的地方就来了：<br>当你尝试使用<strong>类名.方法名</strong>调用函数foo时，会出现如下错误</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="type">Foo</span>.foo()</div><div class="line"><span class="type">Traceback</span> (most recent call last):</div><div class="line">  <span class="type">File</span> <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line"><span class="type">TypeError</span>: unbound <span class="keyword">method</span> foo() must be called <span class="keyword">with</span> <span class="type">Foo</span> instance <span class="keyword">as</span> first argument (got nothing instead)</div></pre></td></tr></table></figure>
+
+<p>看一下报错信息发现需要一个<code>Foo</code>的实例(instance)来调用，OK，于是调用如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>().foo()</span></div><div class="line"><span class="constant">Traceback</span> (most recent call last)<span class="symbol">:</span></div><div class="line">  <span class="constant">File</span> <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></div><div class="line"><span class="constant">TypeError</span><span class="symbol">:</span> foo() takes no arguments (<span class="number">1</span> given)</div></pre></td></tr></table></figure>
+
+<p>-.-!!!<br>估计脾气不好的看到做到这里想要骂街了。<br>因为从字面上看<code>Foo( ).foo( )</code>并没有传递任何参数，而报错信息却显示<code>(1 given)</code>。</p>
+<p><strong>在Python中一切皆对象</strong>，<strong>方法是函数</strong>，所以我们来仔细查看一下<strong>函数对象</strong><code>foo</code></p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="type">Foo</span>.foo</div><div class="line">&lt;unbound <span class="keyword">method</span> <span class="type">Foo</span>.foo&gt;</div><div class="line">&gt;&gt;&gt; <span class="type">Foo</span>().foo</div><div class="line">&lt;bound <span class="keyword">method</span> <span class="type">Foo</span>.foo <span class="keyword">of</span> &lt;__main__.<span class="type">Foo</span> <span class="keyword">object</span> at <span class="number">0x7ff33b424d50</span>&gt;&gt;</div></pre></td></tr></table></figure>
+
+<p>咦～，发现一个有趣的现象：<br><strong>通过类名<code>Foo</code>获取类函数属性<code>foo</code>时，得到的是unbound method object</strong>，<strong>通过实例<code>Foo()</code>获取类的函数属性<code>foo</code>时，得到的是bound method object</strong>。<br>在来看看这两个对象的类型：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="typedef"><span class="keyword">type</span><span class="container">(<span class="type">Foo</span>.<span class="title">foo</span>)</span></span></div><div class="line">&lt;<span class="typedef"><span class="keyword">type</span> 'instancemethod'&gt;</span></div><div class="line">&gt;&gt;&gt; <span class="typedef"><span class="keyword">type</span><span class="container">(<span class="type">Foo</span>()</span>.foo)</span></div><div class="line">&lt;<span class="typedef"><span class="keyword">type</span> 'instancemethod'&gt;</span></div></pre></td></tr></table></figure>
+
+<p>于是我们产生了更大的疑问：为什么同样是实例方法(instancemethod)，获取方式的不同，会导致获得不同的对象呢？</p>
+<h3 id="2-_bound/unbound_method是怎么来的">2. bound/unbound method是怎么来的</h3>
+<p>下面让我们来一层层揭开这个bound/unbound method的面纱。<br>首先，我们知道，对于类，其属性是存放在<code>__dict__</code>字典中，即：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>.__dict_<span class="number">_</span></span></div><div class="line">dict_proxy({<span class="string">'__dict__'</span><span class="symbol">:</span> &lt;attribute <span class="string">'__dict__'</span> of <span class="string">'Foo'</span> objects&gt;, <span class="string">'__module__'</span><span class="symbol">:</span> <span class="string">'__main__'</span>, <span class="string">'foo'</span><span class="symbol">:</span> &lt;function foo at <span class="number">0x7ff33b42a5f0</span>&gt;, <span class="string">'__weakref__'</span><span class="symbol">:</span> &lt;attribute <span class="string">'__weakref__'</span> of <span class="string">'Foo'</span> objects&gt;, <span class="string">'__doc__'</span><span class="symbol">:</span> <span class="constant">None</span>})</div></pre></td></tr></table></figure>
+
+<p>在其中我们看到了<code>&#39;foo&#39;: &lt;function foo at 0x7ff33b42a5f0&gt;</code>。<br>然后利用字典查看<code>foo</code>：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>.__dict_<span class="number">_</span>[<span class="string">'foo'</span>]</span></div><div class="line">&lt;function foo at <span class="number">0x7ff33b42a5f0</span>&gt;</div></pre></td></tr></table></figure>
+
+<p>可以看到<code>foo</code>是一个函数对象，根据上一小节最后一个例子的信息，我们发现，foo是有<strong><em>绑定行为</em></strong>的。</p>
+<blockquote>
+<p>在Python中使用<strong><a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">描述器</a></strong>（<a href="http://pyzh.readthedocs.org/en/latest/Descriptor-HOW-TO-Guide.html" target="_blank" rel="external">有翻译的链接</a>）来表示具有“绑定”行为的对象属性，使用<strong>描述器协议方法</strong>来控制对具有绑定行为属性的访问，这些描述器协议方法包括：<code>__get__()</code>、<code>__set__()</code>和<code>__delete__()</code>。</p>
+</blockquote>
+<p>根据上面这段难以让人理解的描述，我们可以大胆的猜测，<code>Foo</code>的属性<code>foo</code>是一个描述器，它通过<code>__get__()</code>方法来控制对<code>foo</code>的访问。<br>根据描述器协议方法<code>descr.__get__(self, obj, type=None) --&gt; value</code>，我们尝试如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; Foo.__dict__[<span class="string">'foo'</span>].__get__(None,Foo)</div><div class="line">&lt;unbound <span class="function"><span class="keyword">method</span> <span class="title">Foo</span>.<span class="title">foo</span>&gt;</span></div></pre></td></tr></table></figure>
+
+<p>于是，我们惊讶的看到这个结果竟然与上一小节看到的结果相同！<br>这绝不是偶然。<br>事实上，根据<a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">官方文档</a>的描述，调用<code>Foo.foo</code>时，Python会根据查找链从<code>Foo.__dict__[&#39;foo&#39;]</code>开始，然后查找<code>type(Foo).__dict__[&#39;foo&#39;]</code>，一路向上查找<code>type(Foo)</code>的所有基类。<code>Foo.foo</code>会被转换为<code>Foo.__dict__[&#39;foo&#39;].__get__(None,Foo)</code>。<br>也就是说，我们在代码中使用<code>Foo.foo</code>实际上会被转化成<br><code>Foo.__dict__[&#39;foo&#39;].__get__(None,Foo)</code><br>对于根据描述器协议方法<code>descr.__get__(self, obj, type=None) --&gt; value</code>的参数列表，由于其<code>self</code>参数在这里被赋予了<code>None</code>，所以没有给定实例，因此认为是未绑定(unbound)<br>(当然这是一种便于理解的描述，其根本机制请移步<a href="https://docs.python.org/2/howto/descriptor.html" target="_blank" rel="external">这里</a>)<br>那么一个很简单的推理就是：如果<code>self</code>参数给定了实例对象，那么，得到的就是bound method，如下。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="type">Foo</span>.__dict__['foo'].__get__(<span class="type">Foo</span>(),<span class="type">Foo</span>)</div><div class="line">&lt;bound <span class="keyword">method</span> <span class="type">Foo</span>.foo <span class="keyword">of</span> &lt;__main__.<span class="type">Foo</span> <span class="keyword">object</span> at <span class="number">0x7ff33b424d50</span>&gt;&gt;</div></pre></td></tr></table></figure>
+
+<p>因此，可以有如下理解：</p>
+<ol>
+<li>当通过类来获取函数属性的时候，得到的是非绑定方法对象</li>
+<li>当通过实例来获取函数属性的时候，得到的是绑定方法对象</li>
+</ol>
+<h3 id="3-_methods,_static_method_and_class_method">3. methods, static method and class method</h3>
+<p>如果有使用Python方法的经验，那么一定注意过<code>self</code>的使用，请看下面这个例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>     def foo():</div><div class="line"><span class="keyword">...</span>             print <span class="string">'call foo'</span></div><div class="line"><span class="keyword">...</span>     def foo_one(self):</div><div class="line"><span class="keyword">...</span>             print <span class="string">'call foo_one'</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; Foo.foo()</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: unbound method foo() must be called with Foo instance as first argument (got nothing instead)</div><div class="line">&gt;&gt;&gt; Foo().foo()</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: foo() takes no arguments (<span class="number">1</span> given)</div><div class="line">&gt;&gt;&gt; Foo.foo_one()</div><div class="line">Traceback (most recent call last):</div><div class="line">  File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line">TypeError: unbound method foo_one() must be called with Foo instance as first argument (got nothing instead)</div><div class="line">&gt;&gt;&gt; Foo().foo_one()</div><div class="line">call foo_one</div></pre></td></tr></table></figure>
+
+<p>这个例子定义了两个method：<code>foo()</code>和<code>foo_one(self)</code>。<br>可以看到，同样使用<strong>类名.方法名()</strong>调用时，所报的错误相同。但是在使用<strong>实例名.方法名()</strong>调用时，<code>foo_one</code>是可以调用成功的。<br>为什么呢？<br>原因在于当使用<code>Foo().foo_one()</code>调用时，Python做了如下修改：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>.foo_one(<span class="constant">Foo</span>())</span></div><div class="line">call foo_one</div></pre></td></tr></table></figure>
+
+<p>将实例<code>Foo()</code>作为第一个参数传递进去，因此，函数<code>foo_one(self)</code>调用成功。这也解释了为什么<code>Foo().foo()</code>调用不成功。<br>因为<code>foo</code>的定义为<code>foo()</code>，当调用<code>Foo().foo()</code>时，Python做了如下修改：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="input"><span class="prompt">&gt;&gt;&gt;</span> <span class="constant">Foo</span>.foo(<span class="constant">Foo</span>())</span></div><div class="line"><span class="constant">Traceback</span> (most recent call last)<span class="symbol">:</span></div><div class="line">  <span class="constant">File</span> <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;<span class="class"><span class="keyword">module</span>&gt;</span></div><div class="line"><span class="constant">TypeError</span><span class="symbol">:</span> foo() takes no arguments (<span class="number">1</span> given)</div></pre></td></tr></table></figure>
+
+<p>传入了一个参数<code>Foo()</code>，所以会出现<code>foo() takes no arguments (1 given)</code>的错误。<br>我曾经看到有的人把<code>foo()</code>这种参数列表中没有<code>self</code>的方法称为类方法，而把带有<code>self</code>的方法称为实例方法，根据上面的描述可以发现，这种划分是错误的。<br>那么，Python中有没有类方法呢？<br>答案是，有。那么如何定义一个类方法呢？</p>
+<p><strong>Pyhon 类方法</strong><br>还是使用上面的例子</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):          </div><div class="line"><span class="keyword">...</span>     @classmethod                <span class="comment">#定义类方法要点1</span></div><div class="line"><span class="keyword">...</span>     def foo(cls):               <span class="comment">#定义类方法要点2</span></div><div class="line"><span class="keyword">...</span>             print <span class="string">'call foo'</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; Foo.foo()</div><div class="line">call foo</div><div class="line">&gt;&gt;&gt; Foo().foo()</div><div class="line">call foo</div></pre></td></tr></table></figure>
+
+<p>定义类方法需要注意两点：1. 添加<code>@classmethod</code>；2. 添加<code>cls</code>参数<br>这样定义的类方法可以通过<strong>类名.方法名()</strong>的形式调用，也可以通过<strong>实例.方法名()</strong>的形式调用。</p>
+<p>看到这里会发现，在Python中定义方法，总要带两个参数<code>self</code>或者<code>cls</code>。其中通过<code>self</code>限定的method必须使用实例才能调用。<br>那么很自然的一个疑问是，能不能定义不包含<code>self</code>及<code>cls</code>的方法呢？像最开始的例子中<code>foo()</code>那样。答案是有的，办法就是加<code>@staticmethod</code>修饰器。<br>这种被<code>@staticmethod</code>修饰器修饰的方法，称为静态方法</p>
+<p><strong>Python 静态方法</strong><br>除了类方法，还有静态方法，请看下面这个例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>     @staticmethod</div><div class="line"><span class="keyword">...</span>     def foo():</div><div class="line"><span class="keyword">...</span>             print <span class="string">'call foo'</span></div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; Foo.foo()</div><div class="line">call foo</div><div class="line">&gt;&gt;&gt; Foo().foo()</div><div class="line">call foo</div></pre></td></tr></table></figure>
+
+<p>静态方法可以通过<strong>类名.方法名()</strong>和<strong>实例.方法名()</strong>的形式调用。<br>查看<code>type</code>结果如下：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="typedef"><span class="keyword">type</span><span class="container">(<span class="type">Foo</span>.<span class="title">foo</span>)</span></span></div><div class="line">&lt;<span class="typedef"><span class="keyword">type</span> 'function'&gt;</span></div></pre></td></tr></table></figure>
+
+<p>可以看到，静态方法的类型是<code>function</code>，而类方法的类型是<code>instancemethod</code>。</p>
+<h3 id="总结">总结</h3>
+<p>最后来总结一下：<br>从Python方法定义的角度出发，可以分为三种：<br>1.第一个参数是<code>self</code>;<br>2.第一个参数是<code>cls</code>;<br>3.参数既不含<code>self</code>也不含<code>cls</code>的<br>对于第一种方法，必须通过<strong>实例.方法名()</strong>或<strong>类名.方法名(实例)</strong>的形式调用；<br>对于第二种，可以通过<strong>实例.方法名()</strong>或<strong>类名.方法名()</strong>的形式调用，不能通过<strong>类名.方法名(实例)</strong>的形式调用；<br>对于第三种，方法即是普通函数，但是必须通过<strong>实例.方法名()</strong>或<strong>类名.方法名()</strong>的形式调用，不能通过其他形式调用</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/01/31/Python-Unbound-Bound-method-object/" data-id="3cm1rchnl4p2yqf6" class="article-share-link" data-share="baidu">Share</a>
+      
+
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python-LEGB规则" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/01/27/Python-LEGB规则/" class="article-date">
@@ -160,117 +272,6 @@
 
 
   
-    <article id="post-Python-函数参数匹配" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/01/27/Python-函数参数匹配/" class="article-date">
-  <time datetime="2015-01-27T11:52:26.000Z" itemprop="datePublished">Jan 27 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/01/27/Python-函数参数匹配/">Python-函数参数匹配</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>本篇总结函数参数匹配（argument match）的问题</p>
-<h3 id="背景">背景</h3>
-<p>对于函数的使用者而言，关注点有两个：<br>1、函数所提供的接口，即，输入的问题；<br>2、函数的输出；</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">输入</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>&gt;<span class="comment">函数</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>&gt;<span class="comment">输出</span></div></pre></td></tr></table></figure>
-
-<p>对于函数本身而言，关注点有三个：<br>1、输入，包括输入的格式、输入的内容、校验等；<br>2、如何处理输入；<br>3、提供什么样的输出；</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">输入</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>&gt;<span class="comment">处理</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>&gt;<span class="comment">输出</span></div></pre></td></tr></table></figure>
-
-<p>可见，使用者不关注函数的处理过程，只关注输入和输出，而函数则不关注使用者是谁，只关注输入。<br>那么，可以发现，函数提供输入实际是提供接口，所以函数输入设计的实质是接口设计。<br>而接口设计又可以分为两部分：形式设计和内容设计。其中，形式设计回答<strong>什么形式的输入</strong>的问题，内容设计则回答<strong>输入是什么的问题</strong>。</p>
-<p>本篇要讨论的函数参数匹配问题属于形式设计。</p>
-<hr>
-<p>好了，形而上的讲了一堆东西，下面开始正题。</p>
-<h3 id="1-_参数匹配">1. 参数匹配</h3>
-<p>首先来个<code>C++</code>的例子:<br>假设，有函数如下:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span>  record( <span class="built_in">string</span> name, <span class="keyword">unsigned</span> <span class="keyword">int</span> age, <span class="built_in">string</span> email)</div><div class="line">{</div><div class="line">     <span class="comment">// 处理过程</span></div><div class="line">      <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">}</div></pre></td></tr></table></figure>
-
-<p>该函数所提供的接口为 <code>string name, unsigned int age, string email</code><br>那么如下例，使用函数:</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">record(<span class="string">"Joe"</span>, <span class="number">20</span>, <span class="string">"Joe@email.com"</span>);    <span class="comment">// 正确形式</span></div><div class="line">record(<span class="number">20</span>, <span class="string">"Joe"</span>, <span class="string">"Joe@email.com"</span>);    <span class="comment">// 错误形式</span></div><div class="line">record(<span class="string">"Joe@email.com"</span>, <span class="number">20</span>, <span class="string">"Joe"</span>);    <span class="comment">// 语法正确，但是内容错误</span></div></pre></td></tr></table></figure>
-
-<p>当使用 <code>record(20, &quot;Joe&quot;, &quot;Joe@email.com&quot;);</code> 会出现错误。如果使用IDE那么，这里会提示错误信息；如果不是使用IDE，那么在编译时，也会有相应的错误信息提示。错误的原因是<strong>数据类型不匹配</strong>。</p>
-<p>也就是说，在C++中，参数的匹配时是<strong>按照顺序来进行的</strong>。即：<br><code>string name = &quot;Jone&quot;</code>，<code>unsigned int age = 20</code>，<code>string email = &quot;Joe@email.com&quot;</code>，<br>对于静态强类型语言，当出现<code>string name = 20</code>的匹配时，就会出现数据类型不匹配的错误（不考虑模板的情况）。</p>
-<p>基本上，常见的编程语言，函数的默认参数匹配方式都采用<strong>顺序匹配方式</strong>。Python也不例外。但是Python也提供了其他的参数匹配方式：<br><strong>位置匹配</strong>(顺序匹配&lt;默认采用这种方式&gt;)<br><strong>关键字匹配</strong><br><strong>默认值</strong><br><strong>可变参数</strong></p>
-<h3 id="2-_位置匹配">2. 位置匹配</h3>
-<p>Python的位置匹配实例如下：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 函数定义</span></div><div class="line">&gt;&gt;&gt; def record(name, age, email):</div><div class="line"><span class="keyword">...</span>     record_name = name</div><div class="line"><span class="keyword">...</span>     record_age  = age</div><div class="line"><span class="keyword">...</span>     record_email= email</div><div class="line"><span class="keyword">...</span> </div><div class="line"><span class="comment"># 函数使用</span></div><div class="line">&gt;&gt;&gt; record(<span class="string">'Joe'</span>, <span class="number">20</span>, <span class="string">'Joe@email.com'</span>)    <span class="comment">#</span></div><div class="line">&gt;&gt;&gt; record(<span class="number">20</span>, <span class="string">'Joe'</span>, <span class="string">'Joe@email.com'</span>)      <span class="comment">#形式正确，内容错误</span></div></pre></td></tr></table></figure>
-
-<p>对于动态语言，上例中第二种调用，并没有类型不匹配的问题。只是内容错误而已。由此也引出了<strong>关键字匹配</strong></p>
-<h3 id="3-_关键字匹配">3. 关键字匹配</h3>
-<p>在上述例子中第二种调用方式之所以会出现问题，原因在于：<br>由于采用<strong>位置匹配</strong>，所以为了保证输入内容正确，调用时，必须知晓参数的位置（或者顺序）。<br>采用关键字匹配就不存在这种问题。<br>还是先看例子：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="comment"># 函数定义</span></div><div class="line">&gt;&gt;&gt; def record(name, age, email):</div><div class="line"><span class="keyword">...</span>     record_name = name</div><div class="line"><span class="keyword">...</span>     record_age  = age</div><div class="line"><span class="keyword">...</span>     record_email= email</div><div class="line"><span class="keyword">...</span> </div><div class="line"><span class="comment"># 函数使用</span></div><div class="line">&gt;&gt;&gt; record(name = <span class="string">'Joe'</span>, age = <span class="number">20</span>, email = <span class="string">'Joe@email.com'</span>)    <span class="comment">#</span></div><div class="line">&gt;&gt;&gt; record(age = <span class="number">20</span>, name = <span class="string">'Joe'</span>, email = <span class="string">'Joe@email.com'</span>)    <span class="comment">#</span></div></pre></td></tr></table></figure>
-
-<p>可以看到，<strong>关键字匹配</strong>与<strong>位置匹配</strong>的最大区别在于：关键字匹配，在调用函数时，加入了实参与形参的对应信息。<br>这样做的好处在于，调用者只需要知道调用时需要输入的参数名称即可，不用理会其顺序。另外，从语义的角度来看，这种方式在表达上也更加清晰，因为调用时，十分清楚的写明了：<br><code>age = 20</code>，<code>name = &#39;Joe&#39;</code>，<code>email = &#39;Joe@email.com&#39;</code>，<br>程序的可读性非常高。</p>
-<h3 id="4-_默认值">4. 默认值</h3>
-<p>对于函数的调用者而言，调用时所需的参数越少，意味着使用起来也越简单。但是，有时候，为了功能的灵活，同时需要保留足够的备选参数。这些备选参数需要有以下特点：</p>
-<ol>
-<li>如果调用时不设定，则为默认值；</li>
-<li>如果调用时设定，则使用设定值；</li>
-</ol>
-<p>这样，使得函数的易用性与灵活性同时得到保证。<strong>默认值参数</strong>就实现了这样的功能。<br>举例：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">record</span><span class="params">(name, age, email=<span class="string">"xxx@email.com"</span>)</span>:</span></div><div class="line"><span class="prompt">... </span>    <span class="keyword">print</span> name, age, email</div><div class="line"><span class="prompt">... </span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>record(<span class="string">'Joe'</span>, <span class="number">20</span>, <span class="string">'Joe@gmail.com'</span>)</div><div class="line">Joe <span class="number">20</span> Joe<span class="decorator">@gmail.com</span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>record(<span class="string">'Joe'</span>, <span class="number">20</span>)                 </div><div class="line">Joe <span class="number">20</span> xxx<span class="decorator">@email.com</span></div></pre></td></tr></table></figure>
-
-<h3 id="5-_可变参数">5. 可变参数</h3>
-<p><strong>为什么需要可变参数</strong></p>
-<p>假设现在需要这样一个函数：输入两个字符串，输出两个字符串拼起来的字符串。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; def str_add(str1, str2):</div><div class="line"><span class="keyword">...</span>     <span class="keyword">return</span> str1 + str2</div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; str_add(<span class="string">"I am "</span>, <span class="string">"Joe "</span>)</div><div class="line"><span class="string">'I am Joe '</span></div></pre></td></tr></table></figure>
-
-<p>输入两个字符串的例子很容易实现，那么问题来了… ….<br>如果要求输入3个字符串呢？4个？5个？… …总不能一个函数一个函数的写下去吧。</p>
-<p>总结一下，很容易发现不论输入是几个字符串，所作的操作都是将所输入的字符串拼起来。这个时候，可变参数就派上用场了。<br>先看例子：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">str_add</span><span class="params">(*str)</span>:</span>                        <span class="comment"># 定义可变参数</span></div><div class="line"><span class="prompt">... </span>    <span class="keyword">print</span> reduce(<span class="keyword">lambda</span> x,y:x+y,str)      <span class="comment"># 将str中的所有变量相加</span></div><div class="line"><span class="prompt">... </span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>str_add(<span class="string">"I am "</span>, <span class="string">"Joe"</span>)</div><div class="line">I am Joe</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>str_add(<span class="string">"I am "</span>, <span class="string">"Joe, "</span>,<span class="string">"my email is "</span>,<span class="string">"Joe@gmail.com"</span>)</div><div class="line">I am Joe, my email <span class="keyword">is</span> Joe<span class="decorator">@gmail.com</span></div><div class="line">&gt;&gt;&gt;</div></pre></td></tr></table></figure>
-
-<p>上例中，采用可变参数的函数<code>str_add</code>可以支持不定个数的字符串输入，输出这些字符串拼接之后的字符串。</p>
-<p>由此可见：<br>可变参数的意义在于，能够使函数处理参数不定，操作具有共性的需求。而所谓的<strong>可变参数</strong>是指，参数的个数是可以变化的。</p>
-<p><strong>定义可变参数</strong><br>弄清楚为什么要使用可变参数以后，我们来说一下上面的例子中是如何定义可变参数的。<br>首先，我们使用Tuple可以实现一个功能与可变参数相同的函数。</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; def str_add(str):</div><div class="line"><span class="keyword">...</span>     print reduce(lambda x,y:x+y, str)</div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; words = (<span class="string">"I am "</span>, <span class="string">"Joe"</span>)     <span class="comment">#创建一个Tuple对象</span></div><div class="line">&gt;&gt;&gt; str_add(words)</div><div class="line">I am Joe</div></pre></td></tr></table></figure>
-
-<p>对比这个例子和上面的例子可以发现，在本例中，需要提前构造一个Tuple对象，然后再将这个对象传入函数。<br>实际上，上一节的例子中<code>str_add</code>函数内部 <code>*str</code>接收到也是Tuple对象。</p>
-<p>在Python中如果<strong>List对象</strong>或者<strong>Tuple</strong>对象使用<code>*</code>来修饰作为实参传入函数时，会将其变成可变参数列表传入函数。<br>比如下面的例子：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; def str_add(*str):</div><div class="line"><span class="keyword">...</span>      print reduce(lambda x,y:x+y,str)</div><div class="line"><span class="keyword">...</span> </div><div class="line">&gt;&gt;&gt; words = (<span class="string">"I am "</span>, <span class="string">"Joe"</span>)</div><div class="line">&gt;&gt;&gt; str_add(*words)              <span class="comment">#在Tuple对象words前加*作为实参传入函数</span></div><div class="line">I am Joe</div></pre></td></tr></table></figure>
-
-<p>可变参数在形式上有两种：</p>
-<ol>
-<li>对于<strong>List对象</strong>或者<strong>Tuple对象</strong>，在变量前加<code>*</code>；</li>
-<li>对于<strong>Dict对象</strong>，在变量前加<code>**</code>；</li>
-</ol>
-<p>在Python中称加<code>*</code>的变量为<strong><em>Non-keyword Variable Arguments</em></strong>，称加<code>**</code>的变量为<strong><em>keyword Variable Arguments</em></strong>。</p>
-<p>下面给出一个可变参数使用的完整例子</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="prompt">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">foo</span><span class="params">(name, age, *args, **kwargs)</span>:</span></div><div class="line"><span class="prompt">... </span>    <span class="keyword">print</span> name, age, args, kwargs</div><div class="line"><span class="prompt">... </span></div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>info = [<span class="string">"Joe@gmail.com"</span>,<span class="string">"male"</span>]</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>addition = {<span class="string">"location"</span>:<span class="string">"Beijing"</span>,<span class="string">"prof"</span>:<span class="string">"software"</span>}</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>foo(<span class="string">"Joe"</span>,<span class="number">20</span>, *info, **addition)        <span class="comment">#List对象info前加*,Dict对象addition前加**</span></div><div class="line">Joe <span class="number">20</span> (<span class="string">'Joe@gmail.com'</span>, <span class="string">'male'</span>) {<span class="string">'prof'</span>: <span class="string">'software'</span>, <span class="string">'location'</span>: <span class="string">'Beijing'</span>}</div><div class="line"><span class="prompt">&gt;&gt;&gt; </span>foo(<span class="string">"Joe"</span>,<span class="number">20</span>, <span class="string">"Joe@gmail.com"</span>,<span class="string">"male"</span>,location=<span class="string">"Beijing"</span>,prof=<span class="string">"software"</span>)    </div><div class="line">Joe <span class="number">20</span> (<span class="string">'Joe@gmail.com'</span>, <span class="string">'male'</span>) {<span class="string">'prof'</span>: <span class="string">'software'</span>, <span class="string">'location'</span>: <span class="string">'Beijing'</span>}</div></pre></td></tr></table></figure>
-
-<hr>
-<p>总结一下：<br>Python的函数参数匹配提供了多种方式，非常灵活，使用的时候即可以单独使用某一种方式，也可以混合使用多种方式。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/01/27/Python-函数参数匹配/" data-id="ddoovjc5or7hrz6d" class="article-share-link" data-share="baidu">Share</a>
-      
-
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
   
     <nav id="page-nav">
       <a class="extend prev" rel="prev" href="/archives/2015/">&laquo; Prev</a><a class="page-number" href="/archives/2015/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/2015/page/3/">3</a><a class="page-number" href="/archives/2015/page/4/">4</a><a class="extend next" rel="next" href="/archives/2015/page/3/">Next &raquo;</a>
@@ -290,7 +291,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">7</span></li></ul>
     </div>
   </div>
 
@@ -300,6 +301,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/02/01/Python的属性搜索/">(no title)</a>
+          </li>
         
           <li>
             <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
@@ -315,10 +320,6 @@
         
           <li>
             <a href="/2015/01/27/Python-函数参数匹配/">Python-函数参数匹配</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/18/Python-function-2/">Python 函数-参数传递</a>
           </li>
         
       </ul>
