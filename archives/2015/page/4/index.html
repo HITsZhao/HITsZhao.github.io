@@ -1,11 +1,10 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
   
   <title>Archives: 2015 | _Zhao_</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="viewport" content="width=device-width">
   <meta name="description" content="_Zhao_@Haidian.Beijing|Software Engineer(server)|Python/C/C++/Java">
 <meta property="og:type" content="website">
 <meta property="og:title" content="_Zhao_">
@@ -24,79 +23,57 @@
   
   <link rel="stylesheet" href="/css/style.css" type="text/css">
 
-  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]-->
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
   
 </head>
 <body>
-<div id="container">
-  <div id="wrap">
-    <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">_Zhao_</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">_Zhao_@Haidian.Beijing|Software Engineer(server)|Python/C/C++/Java</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="http://www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
-          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
-          <input type="submit" value="" class="search-form-submit">
-          <input name=tn type=hidden value="bds">
-          <input name=cl type=hidden value="3">
-          <input name=ct type=hidden value="2097152">
-          <input type="hidden" name="si" value="yoursite.com">
-        </form>
-      </div>
-    </div>
-  </div>
+  <div id="container">
+    <div class="mobile-nav-panel">
+	<i class="icon-reorder icon-large"></i>
+</div>
+<header id="header">
+	<h1 class="blog-title">
+		<a href="/">_Zhao_</a>
+	</h1>
+	<nav class="nav">
+		<ul>
+			<li><a href="/">Home</a></li><li><a href="/archives">Archives</a></li>
+			<li><a id="nav-search-btn" class="nav-icon" title="Search"></a></li>
+			<li><a href="/atom.xml" id="nav-rss-link" class="nav-icon" title="RSS Feed"></a></li>
+		</ul>
+	</nav>
+	<div id="search-form-wrap">
+		<form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><input type="submit" value="&#xF002;" class="search-form-submit"><input type="hidden" name="q" value="site:http://yoursite.com"></form>
+	</div>
 </header>
-    <div class="outer">
-      <section id="main">
+    <div id="main">
+      
   
-    <article id="post-Python-function-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/01/18/Python-function-1/" class="article-date">
+    <article id="post-Python-function-1" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/01/18/Python-function-1/" class="article-date">
   <time datetime="2015-01-18T06:28:25.000Z" itemprop="datePublished">Jan 18 2015</time>
 </a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+		</span>
+		<span class="meta-elements author">_Zhao|email:zhao423email@gmail.com</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
   
-    <h1 itemprop="name">
+    <h1 itemprop="name" class="entry-title">
       <a class="article-title" href="/2015/01/18/Python-function-1/">Python 函数-函数定义</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近整理了一下Python使用经验，希望对于脑海中Python函数的相关知识进行一下梳理。<br>因为内容可能会比较多，所以分成若干篇来写，尽量保证篇与篇之间的独立性。</p>
+	</header>
+	<div class="entry-content">
+		
+    	<p>最近整理了一下Python使用经验，希望对于脑海中Python函数的相关知识进行一下梳理。<br>因为内容可能会比较多，所以分成若干篇来写，尽量保证篇与篇之间的独立性。</p>
 <p>遵循以下几点要求：<br>1、整体的思路就是由浅入深，每个段落采用结论+解释的结构。<br>2、不求大而全，只涉及要害部分。<br>3、具体语法的部分要回答的问题只有一个：<em>当我这么做时，发生了什么</em>。<br>4、Keep it simple</p>
 <p>好啦，开工。<br>———————————-傲娇的分割线————————————</p>
 <blockquote>
@@ -142,46 +119,52 @@
 
 <hr>
 
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/01/18/Python-function-1/" data-id="3hx38cwanz3m1b5y" class="article-share-link" data-share="baidu">Share</a>
-      
-
-      
-
-      
-    </footer>
-  </div>
-  
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+			</span>
+		</div>
+	</footer>
+	
 </article>
 
 
+	<hr class="article-devider">
+
+
+
   
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/01/14/hello-world/" class="article-date">
+    <article id="post-hello-world" class="post">
+	<footer class="entry-meta-header">
+		<span class="meta-elements date">
+			<a href="/2015/01/14/hello-world/" class="article-date">
   <time datetime="2015-01-14T15:00:07.000Z" itemprop="datePublished">Jan 14 2015</time>
 </a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
+		</span>
+		<span class="meta-elements author">_Zhao|email:zhao423email@gmail.com</span>
+		<div class="commentscount">
+			
+		</div>
+	</footer>
+	
+	<header class="entry-header">
+		
   
-    <h1 itemprop="name">
+    <h1 itemprop="name" class="entry-title">
       <a class="article-title" href="/2015/01/14/hello-world/">Hello World</a>
     </h1>
   
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+	</header>
+	<div class="entry-content">
+		
+    	<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
 <h2 id="Quick_Start">Quick Start</h2>
 <h3 id="Create_a_new_post">Create a new post</h3>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
@@ -200,20 +183,24 @@
 
 <p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
 
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/01/14/hello-world/" data-id="h89c8cg3y2i8ykt6" class="article-share-link" data-share="baidu">Share</a>
-      
-
-      
-
-      
-    </footer>
-  </div>
-  
+    
+	</div>
+	<footer class="entry-footer">
+		<div class="entry-meta-footer">
+			<span class="category">
+				
+			</span>
+			<span class="tags">
+				
+			</span>
+		</div>
+	</footer>
+	
 </article>
+
+
+	<hr class="article-devider">
+
 
 
   
@@ -222,128 +209,35 @@
       <a class="extend prev" rel="prev" href="/archives/2015/page/3/">&laquo; Prev</a><a class="page-number" href="/archives/2015/">1</a><a class="page-number" href="/archives/2015/page/2/">2</a><a class="page-number" href="/archives/2015/page/3/">3</a><span class="page-number current">4</span>
     </nav>
   
-</section>
-      
-      <aside id="sidebar">
-  
-    
-  
-    
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">7</span></li></ul>
-    </div>
-  </div>
 
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2015/02/01/Python的属性搜索/">Python的属性搜索</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/31/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/27/Python-LEGB规则/">Python-LEGB规则</a>
-          </li>
-        
-          <li>
-            <a href="/2015/01/27/Python-函数参数匹配/">Python-函数参数匹配</a>
-          </li>
-        
-      </ul>
     </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Links</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="http://HITsZhao.github.io" target="_blank">博主</a>
-          </li>
-        
-          <li>
-            <a href="" target="_blank">邮箱zhao423email@gmail.com</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-      
-    </div>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2015 _Zhao|email:zhao423email@gmail.com<br>
-      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
-      .
-      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
-    </div>
-  </div>
+    <div class="mb-search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+<footer id="footer">
+	<h1 class="footer-blog-title">
+		<a href="/">_Zhao_</a>
+	</h1>
+	<span class="copyright">
+		&copy; 2015 _Zhao|email:zhao423email@gmail.com<br>
+		Modify from <a href="http://sanographix.github.io/tumblr/apollo/" target="_blank">Apollo</a> theme, designed by <a href="http://www.sanographix.net/" target="_blank">SANOGRAPHIX.NET</a><br>
+		Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+	</span>
 </footer>
-  </div>
-  <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-</nav>
-  <!-- totop start -->
-<div id="totop">
-<a title="totop"><img src="/img/scrollup.png"/></a>
-</div>
+    
 
-<!-- totop end -->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 
 
-<!-- 百度分享 start -->
-
-<div id="article-share-box" class="article-share-box">
-  <div id="bdshare" class="bdsharebuttonbox article-share-links">
-    <a class="article-share-weibo" data-cmd="tsina" title="分享到新浪微博"></a>
-    <a class="article-share-weixin" data-cmd="weixin" title="分享到微信"></a>
-    <a class="article-share-qq" data-cmd="sqq" title="分享到QQ"></a>
-    <a class="article-share-renren" data-cmd="renren" title="分享到人人网"></a>
-    <a class="article-share-more" data-cmd="more" title="更多"></a>
-  </div>
-</div>
-<script>window._bd_share_config={"common":{},"share":{"bdCustomStyle":"nocss.css"}};with(document)0[(getElementsByTagName("head")[0]||body).appendChild(createElement("script")).src="http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion="+~(-new Date()/36e5)];</script>
-
-<!-- 百度分享 end -->
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
 
 
 <script src="/js/script.js" type="text/javascript"></script>
 
-
-</div>
+  </div>
 </body>
 </html>
