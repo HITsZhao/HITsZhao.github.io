@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015 | _Zhao_</title>
+  <title>Archives: 2015/3 | _Zhao_</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="_Zhao_@Haidian.Beijing|Software Engineer(server)|Python/C/C++/Java">
 <meta property="og:type" content="website">
 <meta property="og:title" content="_Zhao_">
-<meta property="og:url" content="http://yoursite.com/archives/2015/page/3/">
+<meta property="og:url" content="http://yoursite.com/archives/2015/03/">
 <meta property="og:site_name" content="_Zhao_">
 <meta property="og:description" content="_Zhao_@Haidian.Beijing|Software Engineer(server)|Python/C/C++/Java">
 <meta name="twitter:card" content="summary">
@@ -76,10 +76,10 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post-Python-Unbound-Bound-method-object" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Python的属性搜索" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/03/19/Python-Unbound-Bound-method-object/" class="article-date">
-  <time datetime="2015-03-19T14:20:24.000Z" itemprop="datePublished">Mar 19 2015</time>
+    <a href="/2015/03/19/Python的属性搜索/" class="article-date">
+  <time datetime="2015-03-19T14:22:38.000Z" itemprop="datePublished">Mar 19 2015</time>
 </a>
     
   </div>
@@ -90,7 +90,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
+      <a class="article-title" href="/2015/03/19/Python的属性搜索/">Python的属性搜索</a>
     </h1>
   
 
@@ -99,27 +99,23 @@
     <div class="article-entry" itemprop="articleBody">
       
         <hr>
-<p>本篇主要总结Python中<strong>绑定方法对象</strong>（Bound method object）和<strong>未绑定方法对象</strong>（Unboud method object）的区别和联系。<br>主要目的是分清楚这两个极容易混淆的概念，顺便将Python的静态方法，类方法及实例方法加以说明</p>
+<p>这是我总结的Python属性搜索的<em>加长版</em>，完整的描述了Python在做属性访问时的过程。<br>了解Python属性搜索的整个过程，有助于更深入地理解Python属性访问。</p>
 <hr>
-<p>OK，下面开始</p>
-<h3 id="1-_一个方法引发的“血案”">1. 一个方法引发的<em>“血案”</em></h3>
-<blockquote>
-<p>类中所定义的函数称为方法</p>
-</blockquote>
-<p>举例：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;class Foo(object):</div><div class="line"><span class="keyword">...</span>        def  foo():</div><div class="line"><span class="keyword">...</span>            print <span class="string">'call foo'</span></div></pre></td></tr></table></figure>
+<h3 id="1-_对Python中属性和方法的看法">1. 对Python中属性和方法的看法</h3>
+<p>理解Python时有一点很重要：<strong>一切皆对象</strong>。<br>为什么呢？<br>先看个例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>    clsattr = <span class="string">'this is class attribute'</span></div><div class="line"><span class="keyword">...</span>    def clsmethod(self):</div><div class="line"><span class="keyword">...</span>        print <span class="string">'this is method'</span></div></pre></td></tr></table></figure>
 
-<p>然后令人困惑的地方就来了：<br>
+<p>在这个例子中，定义了<code>class Foo</code>。<br>通常我们称<code>clsattr</code>为<strong>属性</strong>，<code>clsmethod</code>为<strong>方法</strong>。<br>这种叫法容易造成一种误会：认为对于类来说属性和方法是两种东西。<br>其实，由于在Python中一切皆对象，所以，拿上例来说，<code>clsattr</code>是<code>Foo</code>的一个<code>str</code>类型对象，而<code>clsmethod</code>是<code>Foo</code>的一个<code>function</code>类型对象。<br>也就是对于<code>Foo</code>来讲，<code>clsattr</code>和<code>clsmethod</code>都是对象，除了类型不同，其他的没有什么不一样。<br>这是一个看法上的细微区别，但是对后面理解Python的属性搜索却很重要。<br>
         
           <p class="article-more-link">
-            <a href="/2015/03/19/Python-Unbound-Bound-method-object/#more">Read More</a>
+            <a href="/2015/03/19/Python的属性搜索/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/03/19/Python-Unbound-Bound-method-object/" data-id="0rr5jv3plgbopvhp" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/03/19/Python的属性搜索/" data-id="c2utmc7eg1uwlr6h" class="article-share-link" data-share="baidu">Share</a>
       
 
       
@@ -132,10 +128,10 @@
 
 
   
-    <article id="post-Python-function-2" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Python一个关于类属性及实例属性的小问题的探讨" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/03/19/Python-function-2/" class="article-date">
-  <time datetime="2015-03-19T14:19:34.000Z" itemprop="datePublished">Mar 19 2015</time>
+    <a href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/" class="article-date">
+  <time datetime="2015-03-19T14:22:10.000Z" itemprop="datePublished">Mar 19 2015</time>
 </a>
     
   </div>
@@ -146,7 +142,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python-function-2/">Python 函数-参数传递</a>
+      <a class="article-title" href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
     </h1>
   
 
@@ -155,22 +151,24 @@
     <div class="article-entry" itemprop="articleBody">
       
         <hr>
-<p>这篇主要总结Python函数参数传递。</p>
-<h3 id="背景">背景</h3>
-<p>函数的参数传递方式常见的有三种：<br>1、传值调用；<br>2、传指针调用；<br>3、传引用调用；<br>这种划分方式并不严格，因为传指针调用实质就是传值，但是，传指针调用实现的功能与传引用调用相同</p>
-<p>我们从实现的角度来划分，有以下两种：<br>1、将实参拷贝一份到函数作用域；<br>2、不拷贝实参，而是将获取实参数据的途径（指针或引用）传入函数，使用时，直接操作实参。</p>
-<p>从上面总结的两点，可以有以下观点：<br>1、方式1不会操作原数据，方式2会操作原数据<br>2、对于小数据量（例如，基本数据类型）而言，通常选择方式1<br>3、对于大数据量（例如，对象实例）而言，通常选择方式2</p>
-<p>另外，从函数设计的原则上讲：在选择方式2时尽量避免改变原始数据，除非功能上有必要。<br>当然，这只是原则，是否遵守全在程序员自己把握。<br>
+<p>标题名字有点长。<br>之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。</p>
+<hr>
+<p>性子急的可以直接跳到最后看总结。<br><a href="http://bluecrystal.iteye.com/blog/234923" target="_blank" rel="external">原帖子地址</a></p>
+<h3 id="问题描述">问题描述</h3>
+<p>为了方便对比，我还是使用原帖子的例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AAA</span><span class="params">()</span>:</span>  </div><div class="line">    aaa = <span class="number">10</span>  </div><div class="line">  </div><div class="line"><span class="comment"># 情形1   </span></div><div class="line">obj1 = AAA()  </div><div class="line">obj2 = AAA()   </div><div class="line"><span class="keyword">print</span> obj1.aaa, obj2.aaa, AAA.aaa   </div><div class="line">      </div><div class="line"><span class="comment"># 情形2  </span></div><div class="line">obj1.aaa += <span class="number">2</span>  </div><div class="line"><span class="keyword">print</span> obj1.aaa, obj2.aaa, AAA.aaa   </div><div class="line">  </div><div class="line"><span class="comment"># 情形3  </span></div><div class="line">AAA.aaa += <span class="number">3</span>  </div><div class="line"><span class="keyword">print</span> obj1.aaa, obj2.aaa, AAA.aaa</div></pre></td></tr></table></figure>
+
+<p>情形1的结果是：<code>10 10 10</code>；<br>情形2的结果是：<code>12 10 10</code>；<br>情形3的结果是：<code>12 13 13</code>；<br>
         
           <p class="article-more-link">
-            <a href="/2015/03/19/Python-function-2/#more">Read More</a>
+            <a href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/03/19/Python-function-2/" data-id="brpx9k6axr4fh2lp" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/" data-id="41i04dndwxxq5q7v" class="article-share-link" data-share="baidu">Share</a>
       
 
       
@@ -185,7 +183,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2015/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/2015/">1</a><a class="page-number" href="/archives/2015/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/2015/page/4/">4</a><a class="extend next" rel="next" href="/archives/2015/page/4/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/archives/2015/03/page/2/">2</a><a class="page-number" href="/archives/2015/03/page/3/">3</a><a class="page-number" href="/archives/2015/03/page/4/">4</a><a class="extend next" rel="next" href="/archives/2015/03/page/2/">Next &raquo;</a>
     </nav>
   
 </section>

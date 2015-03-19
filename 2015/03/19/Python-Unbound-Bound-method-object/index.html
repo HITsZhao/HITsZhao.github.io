@@ -17,7 +17,7 @@ OK，下面开始
 123&gt;&gt;&gt;class Foo(object">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python-Bound/Unbound method">
-<meta property="og:url" content="http://yoursite.com/2015/01/31/Python-Unbound-Bound-method-object/">
+<meta property="og:url" content="http://yoursite.com/2015/03/19/Python-Unbound-Bound-method-object/">
 <meta property="og:site_name" content="_Zhao_">
 <meta property="og:description" content="本篇主要总结Python中绑定方法对象（Bound method object）和未绑定方法对象（Unboud method object）的区别和联系。主要目的是分清楚这两个极容易混淆的概念，顺便将Python的静态方法，类方法及实例方法加以说明
 
@@ -100,8 +100,8 @@ OK，下面开始
     <div class="outer">
       <section id="main"><article id="post-Python-Unbound-Bound-method-object" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/01/31/Python-Unbound-Bound-method-object/" class="article-date">
-  <time datetime="2015-01-31T00:23:42.000Z" itemprop="datePublished">Jan 31 2015</time>
+    <a href="/2015/03/19/Python-Unbound-Bound-method-object/" class="article-date">
+  <time datetime="2015-03-19T14:20:24.000Z" itemprop="datePublished">Mar 19 2015</time>
 </a>
     
   </div>
@@ -131,7 +131,7 @@ OK，下面开始
 <p>举例：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;class Foo(object):</div><div class="line"><span class="keyword">...</span>        def  foo():</div><div class="line"><span class="keyword">...</span>            print <span class="string">'call foo'</span></div></pre></td></tr></table></figure>
 
-<p>然后令人困惑的地方就来了：<br>当你尝试使用<strong>类名.方法名</strong>调用函数foo时，会出现如下错误</p>
+<p>然后令人困惑的地方就来了：<br><a id="more"></a><br>当你尝试使用<strong>类名.方法名</strong>调用函数foo时，会出现如下错误</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; <span class="type">Foo</span>.foo()</div><div class="line"><span class="type">Traceback</span> (most recent call last):</div><div class="line">  <span class="type">File</span> <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</div><div class="line"><span class="type">TypeError</span>: unbound <span class="keyword">method</span> foo() must be called <span class="keyword">with</span> <span class="type">Foo</span> instance <span class="keyword">as</span> first argument (got nothing instead)</div></pre></td></tr></table></figure>
 
 <p>看一下报错信息发现需要一个<code>Foo</code>的实例(instance)来调用，OK，于是调用如下：</p>
@@ -197,7 +197,7 @@ OK，下面开始
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/01/31/Python-Unbound-Bound-method-object/" data-id="0rr5jv3plgbopvhp" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/03/19/Python-Unbound-Bound-method-object/" data-id="0rr5jv3plgbopvhp" class="article-share-link" data-share="baidu">Share</a>
       
 
       
@@ -209,19 +209,19 @@ OK，下面开始
     
 <nav id="article-nav">
   
-    <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/03/19/Python-函数参数匹配/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Python一个关于类属性及实例属性的小问题的探讨
+          Python-函数参数匹配
         
       </div>
     </a>
   
   
-    <a href="/2015/01/27/Python-LEGB规则/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/03/19/Python-function-2/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Python-LEGB规则</div>
+      <div class="article-nav-title">Python 函数-参数传递</div>
     </a>
   
 </nav>
@@ -243,7 +243,7 @@ OK，下面开始
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -255,23 +255,23 @@ OK，下面开始
       <ul>
         
           <li>
-            <a href="/2015/02/01/Python的属性搜索/">Python的属性搜索</a>
+            <a href="/2015/03/19/Python的属性搜索/">Python的属性搜索</a>
           </li>
         
           <li>
-            <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
+            <a href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
           </li>
         
           <li>
-            <a href="/2015/01/31/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
+            <a href="/2015/03/19/Python-LEGB规则/">Python-LEGB规则</a>
           </li>
         
           <li>
-            <a href="/2015/01/27/Python-LEGB规则/">Python-LEGB规则</a>
+            <a href="/2015/03/19/Python-函数参数匹配/">Python-函数参数匹配</a>
           </li>
         
           <li>
-            <a href="/2015/01/27/Python-函数参数匹配/">Python-函数参数匹配</a>
+            <a href="/2015/03/19/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
           </li>
         
       </ul>

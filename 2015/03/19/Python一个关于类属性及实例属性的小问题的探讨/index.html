@@ -14,7 +14,7 @@
 12345678910111">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python一个关于类属性及实例属性的小问题的探讨">
-<meta property="og:url" content="http://yoursite.com/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">
+<meta property="og:url" content="http://yoursite.com/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/">
 <meta property="og:site_name" content="_Zhao_">
 <meta property="og:description" content="标题名字有点长。之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。
 
@@ -91,8 +91,8 @@
     <div class="outer">
       <section id="main"><article id="post-Python一个关于类属性及实例属性的小问题的探讨" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/" class="article-date">
-  <time datetime="2015-01-31T00:26:18.000Z" itemprop="datePublished">Jan 31 2015</time>
+    <a href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/" class="article-date">
+  <time datetime="2015-03-19T14:22:10.000Z" itemprop="datePublished">Mar 19 2015</time>
 </a>
     
   </div>
@@ -119,8 +119,7 @@
 <p>为了方便对比，我还是使用原帖子的例子：</p>
 <figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AAA</span><span class="params">()</span>:</span>  </div><div class="line">    aaa = <span class="number">10</span>  </div><div class="line">  </div><div class="line"><span class="comment"># 情形1   </span></div><div class="line">obj1 = AAA()  </div><div class="line">obj2 = AAA()   </div><div class="line"><span class="keyword">print</span> obj1.aaa, obj2.aaa, AAA.aaa   </div><div class="line">      </div><div class="line"><span class="comment"># 情形2  </span></div><div class="line">obj1.aaa += <span class="number">2</span>  </div><div class="line"><span class="keyword">print</span> obj1.aaa, obj2.aaa, AAA.aaa   </div><div class="line">  </div><div class="line"><span class="comment"># 情形3  </span></div><div class="line">AAA.aaa += <span class="number">3</span>  </div><div class="line"><span class="keyword">print</span> obj1.aaa, obj2.aaa, AAA.aaa</div></pre></td></tr></table></figure>
 
-<p>情形1的结果是：<code>10 10 10</code>；<br>情形2的结果是：<code>12 10 10</code>；<br>情形3的结果是：<code>12 13 13</code>；</p>
-<p>首先为什么会有这个问题呢？<br>因为<code>aaa</code>属性被称为类属性，既然是类属性，那么根据从<code>C++/Java</code>这种静态语言使用的经验来判断，类属性应该是为其实例所共享的。那么很自然的，既然是共享关系，那么从类的层次改变<code>aaa</code>的值，自然其实例的<code>aaa</code>的值也要跟着变化了。<br>可是情形3的情况却说明，上面的说法是错的。<br>错哪里呢？<br>要从Python的类属性讲起</p>
+<p>情形1的结果是：<code>10 10 10</code>；<br>情形2的结果是：<code>12 10 10</code>；<br>情形3的结果是：<code>12 13 13</code>；<br><a id="more"></a><br>首先为什么会有这个问题呢？<br>因为<code>aaa</code>属性被称为类属性，既然是类属性，那么根据从<code>C++/Java</code>这种静态语言使用的经验来判断，类属性应该是为其实例所共享的。那么很自然的，既然是共享关系，那么从类的层次改变<code>aaa</code>的值，自然其实例的<code>aaa</code>的值也要跟着变化了。<br>可是情形3的情况却说明，上面的说法是错的。<br>错哪里呢？<br>要从Python的类属性讲起</p>
 <h3 id="Python中类属性的含义">Python中类属性的含义</h3>
 <p>Python属于动态强类型的语言，在很多地方和静态语言不同，因此，不能把静态语言的规则套到动态语言上来。其中，类属性就是一个很好的例子。<br><strong>Python中属性的获取</strong><br>对于属性，我们通常采用<strong>类.属性</strong>或<strong>实例.属性</strong>的形式调用。<br>例如上例中的<code>AAA.aaa</code>属于<strong>类.属性</strong>形式，<code>obj1.aaa</code>属于<strong>实例.属性</strong>的形式<br><strong>Python中属性的设置</strong><br>对于属性的设置我们通常采用<strong>类.属性 = 值</strong>或<strong>实例.属性 = 值</strong>的形式<br>例如<code>obj1.aaa = 3</code></p>
 <p>上例中<code>obj1.aaa += 2</code>等价于<code>obj1.aaa = obj1.aaa + 2</code>，这句话包含了<strong>属性获取</strong>及<strong>属性设置</strong>两个操作</p>
@@ -168,7 +167,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/" data-id="41i04dndwxxq5q7v" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/" data-id="41i04dndwxxq5q7v" class="article-share-link" data-share="baidu">Share</a>
       
 
       
@@ -180,7 +179,7 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/02/01/Python的属性搜索/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/03/19/Python的属性搜索/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
@@ -190,9 +189,9 @@
     </a>
   
   
-    <a href="/2015/01/31/Python-Unbound-Bound-method-object/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/03/19/Python-LEGB规则/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Python-Bound/Unbound method</div>
+      <div class="article-nav-title">Python-LEGB规则</div>
     </a>
   
 </nav>
@@ -214,7 +213,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -226,23 +225,23 @@
       <ul>
         
           <li>
-            <a href="/2015/02/01/Python的属性搜索/">Python的属性搜索</a>
+            <a href="/2015/03/19/Python的属性搜索/">Python的属性搜索</a>
           </li>
         
           <li>
-            <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
+            <a href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
           </li>
         
           <li>
-            <a href="/2015/01/31/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
+            <a href="/2015/03/19/Python-LEGB规则/">Python-LEGB规则</a>
           </li>
         
           <li>
-            <a href="/2015/01/27/Python-LEGB规则/">Python-LEGB规则</a>
+            <a href="/2015/03/19/Python-函数参数匹配/">Python-函数参数匹配</a>
           </li>
         
           <li>
-            <a href="/2015/01/27/Python-函数参数匹配/">Python-函数参数匹配</a>
+            <a href="/2015/03/19/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
           </li>
         
       </ul>

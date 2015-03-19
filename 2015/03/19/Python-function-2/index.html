@@ -13,7 +13,7 @@
 从上面总结的两点，可以有">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python 函数-参数传递">
-<meta property="og:url" content="http://yoursite.com/2015/01/18/Python-function-2/">
+<meta property="og:url" content="http://yoursite.com/2015/03/19/Python-function-2/">
 <meta property="og:site_name" content="_Zhao_">
 <meta property="og:description" content="这篇主要总结Python函数参数传递。
 背景
@@ -88,8 +88,8 @@
     <div class="outer">
       <section id="main"><article id="post-Python-function-2" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/01/18/Python-function-2/" class="article-date">
-  <time datetime="2015-01-18T06:29:08.000Z" itemprop="datePublished">Jan 18 2015</time>
+    <a href="/2015/03/19/Python-function-2/" class="article-date">
+  <time datetime="2015-03-19T14:19:34.000Z" itemprop="datePublished">Mar 19 2015</time>
 </a>
     
   </div>
@@ -114,7 +114,7 @@
 <p>函数的参数传递方式常见的有三种：<br>1、传值调用；<br>2、传指针调用；<br>3、传引用调用；<br>这种划分方式并不严格，因为传指针调用实质就是传值，但是，传指针调用实现的功能与传引用调用相同</p>
 <p>我们从实现的角度来划分，有以下两种：<br>1、将实参拷贝一份到函数作用域；<br>2、不拷贝实参，而是将获取实参数据的途径（指针或引用）传入函数，使用时，直接操作实参。</p>
 <p>从上面总结的两点，可以有以下观点：<br>1、方式1不会操作原数据，方式2会操作原数据<br>2、对于小数据量（例如，基本数据类型）而言，通常选择方式1<br>3、对于大数据量（例如，对象实例）而言，通常选择方式2</p>
-<p>另外，从函数设计的原则上讲：在选择方式2时尽量避免改变原始数据，除非功能上有必要。<br>当然，这只是原则，是否遵守全在程序员自己把握。</p>
+<p>另外，从函数设计的原则上讲：在选择方式2时尽量避免改变原始数据，除非功能上有必要。<br>当然，这只是原则，是否遵守全在程序员自己把握。<br><a id="more"></a></p>
 <hr>
 <p>好了，絮絮叨叨一堆，终于进入正题：<br>———————————傲娇的分割线————————————</p>
 <blockquote>
@@ -192,7 +192,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/01/18/Python-function-2/" data-id="brpx9k6axr4fh2lp" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/03/19/Python-function-2/" data-id="brpx9k6axr4fh2lp" class="article-share-link" data-share="baidu">Share</a>
       
 
       
@@ -204,17 +204,17 @@
     
 <nav id="article-nav">
   
-    <a href="/2015/01/27/Python-函数参数匹配/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2015/03/19/Python-Unbound-Bound-method-object/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          Python-函数参数匹配
+          Python-Bound/Unbound method
         
       </div>
     </a>
   
   
-    <a href="/2015/01/18/Python-function-1/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2015/03/19/Python-function-1/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">Python 函数-函数定义</div>
     </a>
@@ -238,7 +238,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/02/">February 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">7</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -250,23 +250,23 @@
       <ul>
         
           <li>
-            <a href="/2015/02/01/Python的属性搜索/">Python的属性搜索</a>
+            <a href="/2015/03/19/Python的属性搜索/">Python的属性搜索</a>
           </li>
         
           <li>
-            <a href="/2015/01/31/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
+            <a href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
           </li>
         
           <li>
-            <a href="/2015/01/31/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
+            <a href="/2015/03/19/Python-LEGB规则/">Python-LEGB规则</a>
           </li>
         
           <li>
-            <a href="/2015/01/27/Python-LEGB规则/">Python-LEGB规则</a>
+            <a href="/2015/03/19/Python-函数参数匹配/">Python-函数参数匹配</a>
           </li>
         
           <li>
-            <a href="/2015/01/27/Python-函数参数匹配/">Python-函数参数匹配</a>
+            <a href="/2015/03/19/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
           </li>
         
       </ul>

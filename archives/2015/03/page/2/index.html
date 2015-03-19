@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Archives: 2015 | _Zhao_</title>
+  <title>Archives: 2015/3 | _Zhao_</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="_Zhao_@Haidian.Beijing|Software Engineer(server)|Python/C/C++/Java">
 <meta property="og:type" content="website">
 <meta property="og:title" content="_Zhao_">
-<meta property="og:url" content="http://yoursite.com/archives/2015/page/3/">
+<meta property="og:url" content="http://yoursite.com/archives/2015/03/page/2/">
 <meta property="og:site_name" content="_Zhao_">
 <meta property="og:description" content="_Zhao_@Haidian.Beijing|Software Engineer(server)|Python/C/C++/Java">
 <meta name="twitter:card" content="summary">
@@ -76,10 +76,10 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post-Python-Unbound-Bound-method-object" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Python-LEGB规则" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/03/19/Python-Unbound-Bound-method-object/" class="article-date">
-  <time datetime="2015-03-19T14:20:24.000Z" itemprop="datePublished">Mar 19 2015</time>
+    <a href="/2015/03/19/Python-LEGB规则/" class="article-date">
+  <time datetime="2015-03-19T14:21:40.000Z" itemprop="datePublished">Mar 19 2015</time>
 </a>
     
   </div>
@@ -90,7 +90,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
+      <a class="article-title" href="/2015/03/19/Python-LEGB规则/">Python-LEGB规则</a>
     </h1>
   
 
@@ -99,27 +99,26 @@
     <div class="article-entry" itemprop="articleBody">
       
         <hr>
-<p>本篇主要总结Python中<strong>绑定方法对象</strong>（Bound method object）和<strong>未绑定方法对象</strong>（Unboud method object）的区别和联系。<br>主要目的是分清楚这两个极容易混淆的概念，顺便将Python的静态方法，类方法及实例方法加以说明</p>
+<p>本篇总结了Python中的命名空间及LEGB原则</p>
 <hr>
-<p>OK，下面开始</p>
-<h3 id="1-_一个方法引发的“血案”">1. 一个方法引发的<em>“血案”</em></h3>
+<p><strong>写在前面的话</strong><br>之所以有这篇总结，是因为在当初学习及使用Python的过程中发现，理解Python的LEGB原则是理解Python命名空间的关键，而理解Python的命名空间又是理解Python中许多语法规定的关键。所以，Python的LEGB原则就成为Python中一个非常核心的内容，因而，也就有了本篇。</p>
+<p>OK，下面开始正文<br>———————————傲娇的分割线—————————————</p>
+<h3 id="1-_命名空间">1. 命名空间</h3>
+<p>先来一段概要总结：</p>
 <blockquote>
-<p>类中所定义的函数称为方法</p>
+<p>白话一点讲：<strong>命名空间是对变量名的分组划分</strong>。<br>不同组的相同名称的变量视为两个独立的变量，因此隶属于不同分组（即命名空间）的变量名可以重复。<br>命名空间可以存在多个，使用命名空间，表示在该命名空间中查找当前名称。</p>
 </blockquote>
-<p>举例：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;class Foo(object):</div><div class="line"><span class="keyword">...</span>        def  foo():</div><div class="line"><span class="keyword">...</span>            print <span class="string">'call foo'</span></div></pre></td></tr></table></figure>
-
-<p>然后令人困惑的地方就来了：<br>
+<p>虽然命名空间是一个跟具体语言无关的概念，但是，不同的语言由于机制不同，因此在表现上还是有差别的。例如下述Python的例子：<br>
         
           <p class="article-more-link">
-            <a href="/2015/03/19/Python-Unbound-Bound-method-object/#more">Read More</a>
+            <a href="/2015/03/19/Python-LEGB规则/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/03/19/Python-Unbound-Bound-method-object/" data-id="0rr5jv3plgbopvhp" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/03/19/Python-LEGB规则/" data-id="7xz4ytwffjilg25g" class="article-share-link" data-share="baidu">Share</a>
       
 
       
@@ -132,10 +131,10 @@
 
 
   
-    <article id="post-Python-function-2" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-Python-函数参数匹配" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/03/19/Python-function-2/" class="article-date">
-  <time datetime="2015-03-19T14:19:34.000Z" itemprop="datePublished">Mar 19 2015</time>
+    <a href="/2015/03/19/Python-函数参数匹配/" class="article-date">
+  <time datetime="2015-03-19T14:21:10.000Z" itemprop="datePublished">Mar 19 2015</time>
 </a>
     
   </div>
@@ -146,7 +145,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python-function-2/">Python 函数-参数传递</a>
+      <a class="article-title" href="/2015/03/19/Python-函数参数匹配/">Python-函数参数匹配</a>
     </h1>
   
 
@@ -155,22 +154,25 @@
     <div class="article-entry" itemprop="articleBody">
       
         <hr>
-<p>这篇主要总结Python函数参数传递。</p>
+<p>本篇总结函数参数匹配（argument match）的问题</p>
 <h3 id="背景">背景</h3>
-<p>函数的参数传递方式常见的有三种：<br>1、传值调用；<br>2、传指针调用；<br>3、传引用调用；<br>这种划分方式并不严格，因为传指针调用实质就是传值，但是，传指针调用实现的功能与传引用调用相同</p>
-<p>我们从实现的角度来划分，有以下两种：<br>1、将实参拷贝一份到函数作用域；<br>2、不拷贝实参，而是将获取实参数据的途径（指针或引用）传入函数，使用时，直接操作实参。</p>
-<p>从上面总结的两点，可以有以下观点：<br>1、方式1不会操作原数据，方式2会操作原数据<br>2、对于小数据量（例如，基本数据类型）而言，通常选择方式1<br>3、对于大数据量（例如，对象实例）而言，通常选择方式2</p>
-<p>另外，从函数设计的原则上讲：在选择方式2时尽量避免改变原始数据，除非功能上有必要。<br>当然，这只是原则，是否遵守全在程序员自己把握。<br>
+<p>对于函数的使用者而言，关注点有两个：<br>1、函数所提供的接口，即，输入的问题；<br>2、函数的输出；</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">输入</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>&gt;<span class="comment">函数</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>&gt;<span class="comment">输出</span></div></pre></td></tr></table></figure>
+
+<p>对于函数本身而言，关注点有三个：<br>1、输入，包括输入的格式、输入的内容、校验等；<br>2、如何处理输入；<br>3、提供什么样的输出；</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="comment">输入</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>&gt;<span class="comment">处理</span><span class="literal">-</span><span class="literal">-</span><span class="literal">-</span>&gt;<span class="comment">输出</span></div></pre></td></tr></table></figure>
+
+<p>可见，使用者不关注函数的处理过程，只关注输入和输出，而函数则不关注使用者是谁，只关注输入。<br>那么，可以发现，函数提供输入实际是提供接口，所以函数输入设计的实质是接口设计。<br>而接口设计又可以分为两部分：形式设计和内容设计。其中，形式设计回答<strong>什么形式的输入</strong>的问题，内容设计则回答<strong>输入是什么的问题</strong>。<br>
         
           <p class="article-more-link">
-            <a href="/2015/03/19/Python-function-2/#more">Read More</a>
+            <a href="/2015/03/19/Python-函数参数匹配/#more">Read More</a>
           </p>
         
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/03/19/Python-function-2/" data-id="brpx9k6axr4fh2lp" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/03/19/Python-函数参数匹配/" data-id="p5ovzx6uedqt65g0" class="article-share-link" data-share="baidu">Share</a>
       
 
       
@@ -185,7 +187,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2015/page/2/">&laquo; Prev</a><a class="page-number" href="/archives/2015/">1</a><a class="page-number" href="/archives/2015/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/archives/2015/page/4/">4</a><a class="extend next" rel="next" href="/archives/2015/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/archives/2015/03/">&laquo; Prev</a><a class="page-number" href="/archives/2015/03/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/2015/03/page/3/">3</a><a class="page-number" href="/archives/2015/03/page/4/">4</a><a class="extend next" rel="next" href="/archives/2015/03/page/3/">Next &raquo;</a>
     </nav>
   
 </section>
