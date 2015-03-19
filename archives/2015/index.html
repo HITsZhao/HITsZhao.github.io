@@ -76,6 +76,54 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Python-function-1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/19/Python-function-1/" class="article-date">
+  <time datetime="2015-03-19T14:49:34.000Z" itemprop="datePublished">Mar 19 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/19/Python-function-1/">Python 函数-函数定义</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近整理了一下Python使用经验，希望对于脑海中Python函数的相关知识进行一下梳理。<br>因为内容可能会比较多，所以分成若干篇来写，尽量保证篇与篇之间的独立性。</p>
+<p>遵循以下几点要求：<br>1、整体的思路就是由浅入深，每个段落采用结论+解释的结构。<br>2、不求大而全，只涉及要害部分。<br>3、具体语法的部分要回答的问题只有一个：<em>当我这么做时，发生了什么</em>。<br>4、Keep it simple<br>
+        
+          <p class="article-more-link">
+            <a href="/2015/03/19/Python-function-1/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/03/19/Python-function-1/" data-id="aez0ysgo2kzaby8n" class="article-share-link" data-share="baidu">Share</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python的属性搜索" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/03/19/Python的属性搜索/" class="article-date">
@@ -115,60 +163,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/03/19/Python的属性搜索/" data-id="pw9gmkqbzuw80m4o" class="article-share-link" data-share="baidu">Share</a>
-      
-
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Python一个关于类属性及实例属性的小问题的探讨" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/" class="article-date">
-  <time datetime="2015-03-19T14:22:10.000Z" itemprop="datePublished">Mar 19 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/">Python一个关于类属性及实例属性的小问题的探讨</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>标题名字有点长。<br>之所以想写这个文章是因为碰巧看到网上一篇关于Pyhon中类属性及实例属性区别的帖子。因为我之前也被这个问题困扰过，今天碰巧看到了这篇帖子，发现帖子的作者只是描述了现象，然后对原因的解释比较含糊，并没有从根本上解释这个问题，所以才想写一下我对这个问题的想法。</p>
-<hr>
-<p>性子急的可以直接跳到最后看总结。<br><a href="http://bluecrystal.iteye.com/blog/234923" target="_blank" rel="external">原帖子地址</a></p>
-<h3 id="问题描述">问题描述</h3>
-<p>为了方便对比，我还是使用原帖子的例子：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">AAA</span><span class="params">()</span>:</span>  </div><div class="line">    aaa = <span class="number">10</span>  </div><div class="line">  </div><div class="line"><span class="comment"># 情形1   </span></div><div class="line">obj1 = AAA()  </div><div class="line">obj2 = AAA()   </div><div class="line"><span class="keyword">print</span> obj1.aaa, obj2.aaa, AAA.aaa   </div><div class="line">      </div><div class="line"><span class="comment"># 情形2  </span></div><div class="line">obj1.aaa += <span class="number">2</span>  </div><div class="line"><span class="keyword">print</span> obj1.aaa, obj2.aaa, AAA.aaa   </div><div class="line">  </div><div class="line"><span class="comment"># 情形3  </span></div><div class="line">AAA.aaa += <span class="number">3</span>  </div><div class="line"><span class="keyword">print</span> obj1.aaa, obj2.aaa, AAA.aaa</div></pre></td></tr></table></figure>
-
-<p>情形1的结果是：<code>10 10 10</code>；<br>情形2的结果是：<code>12 10 10</code>；<br>情形3的结果是：<code>12 13 13</code>；<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/" data-id="6oit3g8maflym4ud" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/03/19/Python的属性搜索/" data-id="nv22gkivf0m7gfsk" class="article-share-link" data-share="baidu">Share</a>
       
 
       
@@ -193,8 +188,22 @@
     
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li></ul>
+    </div>
+  </div>
+
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Python/" style="font-size: NaNpx;">Python</a>
+    </div>
+  </div>
+
   
     
   <div class="widget-wrap">
@@ -212,6 +221,10 @@
       <ul>
         
           <li>
+            <a href="/2015/03/19/Python-function-1/">Python 函数-函数定义</a>
+          </li>
+        
+          <li>
             <a href="/2015/03/19/Python的属性搜索/">Python的属性搜索</a>
           </li>
         
@@ -225,10 +238,6 @@
         
           <li>
             <a href="/2015/03/19/Python-函数参数匹配/">Python-函数参数匹配</a>
-          </li>
-        
-          <li>
-            <a href="/2015/03/19/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
           </li>
         
       </ul>
