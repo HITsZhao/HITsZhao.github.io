@@ -4,12 +4,12 @@
 <head>
   <meta charset="utf-8">
   
-  <title>_Zhao_</title>
+  <title>Archives: 2015 | _Zhao_</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="_Zhao_@Haidian.Beijing|Software Engineer(server)|Python/C/C++/Java">
 <meta property="og:type" content="website">
 <meta property="og:title" content="_Zhao_">
-<meta property="og:url" content="http://yoursite.com/page/4/">
+<meta property="og:url" content="http://yoursite.com/archives/2015/page/5/">
 <meta property="og:site_name" content="_Zhao_">
 <meta property="og:description" content="_Zhao_@Haidian.Beijing|Software Engineer(server)|Python/C/C++/Java">
 <meta name="twitter:card" content="summary">
@@ -76,10 +76,10 @@
     <div class="outer">
       <section id="main">
   
-    <article id="post-Python-Unbound-Bound-method-object" class="article article-type-post" itemscope itemprop="blogPost">
+    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2015/03/19/Python-Unbound-Bound-method-object/" class="article-date">
-  <time datetime="2015-03-19T14:20:24.000Z" itemprop="datePublished">Mar 19 2015</time>
+    <a href="/2015/01/14/hello-world/" class="article-date">
+  <time datetime="2015-01-14T15:00:07.000Z" itemprop="datePublished">Jan 14 2015</time>
 </a>
     
   </div>
@@ -90,7 +90,7 @@
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
+      <a class="article-title" href="/2015/01/14/hello-world/">Hello World</a>
     </h1>
   
 
@@ -98,85 +98,34 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <hr>
-<p>本篇主要总结Python中<strong>绑定方法对象</strong>（Bound method object）和<strong>未绑定方法对象</strong>（Unboud method object）的区别和联系。<br>主要目的是分清楚这两个极容易混淆的概念，顺便将Python的静态方法，类方法及实例方法加以说明</p>
-<hr>
-<p>OK，下面开始</p>
-<h3 id="1-_一个方法引发的“血案”">1. 一个方法引发的<em>“血案”</em></h3>
-<blockquote>
-<p>类中所定义的函数称为方法</p>
-</blockquote>
-<p>举例：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;class Foo(object):</div><div class="line"><span class="keyword">...</span>        def  foo():</div><div class="line"><span class="keyword">...</span>            print <span class="string">'call foo'</span></div></pre></td></tr></table></figure>
+        <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">trobuleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
+<h2 id="Quick_Start">Quick Start</h2>
+<h3 id="Create_a_new_post">Create a new post</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
 
-<p>然后令人困惑的地方就来了：<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/03/19/Python-Unbound-Bound-method-object/#more">Read More</a>
-          </p>
-        
+<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
+<h3 id="Run_server">Run server</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo server</div></pre></td></tr></table></figure>
+
+<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
+<h3 id="Generate_static_files">Generate static files</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo generate</div></pre></td></tr></table></figure>
+
+<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
+<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo deploy</div></pre></td></tr></table></figure>
+
+<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
+
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://yoursite.com/2015/03/19/Python-Unbound-Bound-method-object/" data-id="o3ho978mplt63j6h" class="article-share-link" data-share="baidu">Share</a>
+        <a data-url="http://yoursite.com/2015/01/14/hello-world/" data-id="ayf2aew22hzv3lhf" class="article-share-link" data-share="baidu">Share</a>
       
 
       
-        <a href="http://yoursite.com/2015/03/19/Python-Unbound-Bound-method-object/#ds-thread" class="article-comment-link">Comments</a>
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-Python-function-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/03/19/Python-function-2/" class="article-date">
-  <time datetime="2015-03-19T14:19:34.000Z" itemprop="datePublished">Mar 19 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python-function-2/">Python 函数-参数传递</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>这篇主要总结Python函数参数传递。</p>
-<h3 id="背景">背景</h3>
-<p>函数的参数传递方式常见的有三种：<br>1、传值调用；<br>2、传指针调用；<br>3、传引用调用；<br>这种划分方式并不严格，因为传指针调用实质就是传值，但是，传指针调用实现的功能与传引用调用相同</p>
-<p>我们从实现的角度来划分，有以下两种：<br>1、将实参拷贝一份到函数作用域；<br>2、不拷贝实参，而是将获取实参数据的途径（指针或引用）传入函数，使用时，直接操作实参。</p>
-<p>从上面总结的两点，可以有以下观点：<br>1、方式1不会操作原数据，方式2会操作原数据<br>2、对于小数据量（例如，基本数据类型）而言，通常选择方式1<br>3、对于大数据量（例如，对象实例）而言，通常选择方式2</p>
-<p>另外，从函数设计的原则上讲：在选择方式2时尽量避免改变原始数据，除非功能上有必要。<br>当然，这只是原则，是否遵守全在程序员自己把握。<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/03/19/Python-function-2/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/03/19/Python-function-2/" data-id="flk5qm6cvh6lbeok" class="article-share-link" data-share="baidu">Share</a>
-      
-
-      
-        <a href="http://yoursite.com/2015/03/19/Python-function-2/#ds-thread" class="article-comment-link">Comments</a>
+        <a href="http://yoursite.com/2015/01/14/hello-world/#ds-thread" class="article-comment-link">Comments</a>
       
 
       
@@ -189,7 +138,7 @@
   
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/3/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/5/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/archives/2015/page/4/">&laquo; Prev</a><a class="page-number" href="/archives/2015/">1</a><span class="space">&hellip;</span><a class="page-number" href="/archives/2015/page/3/">3</a><a class="page-number" href="/archives/2015/page/4/">4</a><span class="page-number current">5</span>
     </nav>
   
 </section>

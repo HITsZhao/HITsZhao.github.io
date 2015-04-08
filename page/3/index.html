@@ -76,6 +76,63 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Python-LEGB规则" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/19/Python-LEGB规则/" class="article-date">
+  <time datetime="2015-03-19T14:21:40.000Z" itemprop="datePublished">Mar 19 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/19/Python-LEGB规则/">Python-LEGB规则</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>本篇总结了Python中的命名空间及LEGB原则</p>
+<hr>
+<p><strong>写在前面的话</strong><br>之所以有这篇总结，是因为在当初学习及使用Python的过程中发现，理解Python的LEGB原则是理解Python命名空间的关键，而理解Python的命名空间又是理解Python中许多语法规定的关键。所以，Python的LEGB原则就成为Python中一个非常核心的内容，因而，也就有了本篇。</p>
+<p>OK，下面开始正文<br>———————————傲娇的分割线—————————————</p>
+<h3 id="1-_命名空间">1. 命名空间</h3>
+<p>先来一段概要总结：</p>
+<blockquote>
+<p>白话一点讲：<strong>命名空间是对变量名的分组划分</strong>。<br>不同组的相同名称的变量视为两个独立的变量，因此隶属于不同分组（即命名空间）的变量名可以重复。<br>命名空间可以存在多个，使用命名空间，表示在该命名空间中查找当前名称。</p>
+</blockquote>
+<p>虽然命名空间是一个跟具体语言无关的概念，但是，不同的语言由于机制不同，因此在表现上还是有差别的。例如下述Python的例子：<br>
+        
+          <p class="article-more-link">
+            <a href="/2015/03/19/Python-LEGB规则/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/03/19/Python-LEGB规则/" data-id="38z9yq5zc7b6z9rd" class="article-share-link" data-share="baidu">Share</a>
+      
+
+      
+        <a href="http://yoursite.com/2015/03/19/Python-LEGB规则/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python-函数参数匹配" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/03/19/Python-函数参数匹配/" class="article-date">
@@ -132,67 +189,9 @@
 
 
   
-    <article id="post-Python-Unbound-Bound-method-object" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/03/19/Python-Unbound-Bound-method-object/" class="article-date">
-  <time datetime="2015-03-19T14:20:24.000Z" itemprop="datePublished">Mar 19 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python-Unbound-Bound-method-object/">Python-Bound/Unbound method</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>本篇主要总结Python中<strong>绑定方法对象</strong>（Bound method object）和<strong>未绑定方法对象</strong>（Unboud method object）的区别和联系。<br>主要目的是分清楚这两个极容易混淆的概念，顺便将Python的静态方法，类方法及实例方法加以说明</p>
-<hr>
-<p>OK，下面开始</p>
-<h3 id="1-_一个方法引发的“血案”">1. 一个方法引发的<em>“血案”</em></h3>
-<blockquote>
-<p>类中所定义的函数称为方法</p>
-</blockquote>
-<p>举例：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt;class Foo(object):</div><div class="line"><span class="keyword">...</span>        def  foo():</div><div class="line"><span class="keyword">...</span>            print <span class="string">'call foo'</span></div></pre></td></tr></table></figure>
-
-<p>然后令人困惑的地方就来了：<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/03/19/Python-Unbound-Bound-method-object/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/03/19/Python-Unbound-Bound-method-object/" data-id="o3ho978mplt63j6h" class="article-share-link" data-share="baidu">Share</a>
-      
-
-      
-        <a href="http://yoursite.com/2015/03/19/Python-Unbound-Bound-method-object/#ds-thread" class="article-comment-link">Comments</a>
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/page/2/">&laquo; Prev</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/4/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -205,7 +204,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -214,7 +213,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Python/" style="font-size: NaNpx;">Python</a>
+      <a href="/tags/C/" style="font-size: NaNpx;">C++</a><a href="/tags/Python/" style="font-size: NaNpx;">Python</a>
     </div>
   </div>
 
@@ -223,7 +222,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -233,6 +232,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/04/08/makefile/">一个通用的makefile脚本</a>
+          </li>
         
           <li>
             <a href="/2015/03/19/Python-function-1/">Python 函数-函数定义</a>
@@ -248,10 +251,6 @@
         
           <li>
             <a href="/2015/03/19/Python-LEGB规则/">Python-LEGB规则</a>
-          </li>
-        
-          <li>
-            <a href="/2015/03/19/Python-函数参数匹配/">Python-函数参数匹配</a>
           </li>
         
       </ul>

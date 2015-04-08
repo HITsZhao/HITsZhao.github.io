@@ -76,6 +76,60 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Python的属性搜索" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/03/19/Python的属性搜索/" class="article-date">
+  <time datetime="2015-03-19T14:22:38.000Z" itemprop="datePublished">Mar 19 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/03/19/Python的属性搜索/">Python的属性搜索</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <hr>
+<p>这是我总结的Python属性搜索的<em>加长版</em>，完整的描述了Python在做属性访问时的过程。<br>了解Python属性搜索的整个过程，有助于更深入地理解Python属性访问。</p>
+<hr>
+<h3 id="1-_对Python中属性和方法的看法">1. 对Python中属性和方法的看法</h3>
+<p>理解Python时有一点很重要：<strong>一切皆对象</strong>。<br>为什么呢？<br>先看个例子：</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>    clsattr = <span class="string">'this is class attribute'</span></div><div class="line"><span class="keyword">...</span>    def clsmethod(self):</div><div class="line"><span class="keyword">...</span>        print <span class="string">'this is method'</span></div></pre></td></tr></table></figure>
+
+<p>在这个例子中，定义了<code>class Foo</code>。<br>通常我们称<code>clsattr</code>为<strong>属性</strong>，<code>clsmethod</code>为<strong>方法</strong>。<br>这种叫法容易造成一种误会：认为对于类来说属性和方法是两种东西。<br>其实，由于在Python中一切皆对象，所以，拿上例来说，<code>clsattr</code>是<code>Foo</code>的一个<code>str</code>类型对象，而<code>clsmethod</code>是<code>Foo</code>的一个<code>function</code>类型对象。<br>也就是对于<code>Foo</code>来讲，<code>clsattr</code>和<code>clsmethod</code>都是对象，除了类型不同，其他的没有什么不一样。<br>这是一个看法上的细微区别，但是对后面理解Python的属性搜索却很重要。<br>
+        
+          <p class="article-more-link">
+            <a href="/2015/03/19/Python的属性搜索/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/03/19/Python的属性搜索/" data-id="3kco4g7avzdg4i1v" class="article-share-link" data-share="baidu">Share</a>
+      
+
+      
+        <a href="http://yoursite.com/2015/03/19/Python的属性搜索/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python一个关于类属性及实例属性的小问题的探讨" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/03/19/Python一个关于类属性及实例属性的小问题的探讨/" class="article-date">
@@ -131,66 +185,9 @@
 
 
   
-    <article id="post-Python-LEGB规则" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/03/19/Python-LEGB规则/" class="article-date">
-  <time datetime="2015-03-19T14:21:40.000Z" itemprop="datePublished">Mar 19 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python-LEGB规则/">Python-LEGB规则</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>本篇总结了Python中的命名空间及LEGB原则</p>
-<hr>
-<p><strong>写在前面的话</strong><br>之所以有这篇总结，是因为在当初学习及使用Python的过程中发现，理解Python的LEGB原则是理解Python命名空间的关键，而理解Python的命名空间又是理解Python中许多语法规定的关键。所以，Python的LEGB原则就成为Python中一个非常核心的内容，因而，也就有了本篇。</p>
-<p>OK，下面开始正文<br>———————————傲娇的分割线—————————————</p>
-<h3 id="1-_命名空间">1. 命名空间</h3>
-<p>先来一段概要总结：</p>
-<blockquote>
-<p>白话一点讲：<strong>命名空间是对变量名的分组划分</strong>。<br>不同组的相同名称的变量视为两个独立的变量，因此隶属于不同分组（即命名空间）的变量名可以重复。<br>命名空间可以存在多个，使用命名空间，表示在该命名空间中查找当前名称。</p>
-</blockquote>
-<p>虽然命名空间是一个跟具体语言无关的概念，但是，不同的语言由于机制不同，因此在表现上还是有差别的。例如下述Python的例子：<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/03/19/Python-LEGB规则/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/03/19/Python-LEGB规则/" data-id="38z9yq5zc7b6z9rd" class="article-share-link" data-share="baidu">Share</a>
-      
-
-      
-        <a href="http://yoursite.com/2015/03/19/Python-LEGB规则/#ds-thread" class="article-comment-link">Comments</a>
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
   
     <nav id="page-nav">
-      <a class="extend prev" rel="prev" href="/archives/2015/">&laquo; Prev</a><a class="page-number" href="/archives/2015/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/2015/page/3/">3</a><a class="page-number" href="/archives/2015/page/4/">4</a><a class="extend next" rel="next" href="/archives/2015/page/3/">Next &raquo;</a>
+      <a class="extend prev" rel="prev" href="/archives/2015/">&laquo; Prev</a><a class="page-number" href="/archives/2015/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/2015/page/3/">3</a><a class="page-number" href="/archives/2015/page/4/">4</a><a class="page-number" href="/archives/2015/page/5/">5</a><a class="extend next" rel="next" href="/archives/2015/page/3/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -203,7 +200,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -212,7 +209,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Python/" style="font-size: NaNpx;">Python</a>
+      <a href="/tags/C/" style="font-size: NaNpx;">C++</a><a href="/tags/Python/" style="font-size: NaNpx;">Python</a>
     </div>
   </div>
 
@@ -221,7 +218,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -231,6 +228,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/04/08/makefile/">一个通用的makefile脚本</a>
+          </li>
         
           <li>
             <a href="/2015/03/19/Python-function-1/">Python 函数-函数定义</a>
@@ -246,10 +247,6 @@
         
           <li>
             <a href="/2015/03/19/Python-LEGB规则/">Python-LEGB规则</a>
-          </li>
-        
-          <li>
-            <a href="/2015/03/19/Python-函数参数匹配/">Python-函数参数匹配</a>
           </li>
         
       </ul>

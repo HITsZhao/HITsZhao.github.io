@@ -76,6 +76,53 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-makefile" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2015/04/08/makefile/" class="article-date">
+  <time datetime="2015-04-08T12:03:42.000Z" itemprop="datePublished">Apr 8 2015</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2015/04/08/makefile/">一个通用的makefile脚本</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天下午抽空写了一个通用的makefile脚本，主要用来编译C++</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div></pre></td><td class="code"><pre><div class="line">.PHONY: all clean</div><div class="line">all: </div><div class="line"># annotation when release version</div><div class="line">DEBUG       := y</div><div class="line">TARGET_PROG := main</div><div class="line"># project directory </div><div class="line">DEBUG_DIR   := ./Debug</div><div class="line">RELEASE_DIR := ./Release</div><div class="line">BIN_DIR     := <span class="variable">$(</span><span class="keyword">if</span> <span class="variable">$(</span>DEBUG), <span class="variable">$(</span>DEBUG_DIR), <span class="variable">$(</span>RELEASE_DIR))</div><div class="line"># shell command</div><div class="line">CC    := gcc </div><div class="line">CXX   := g++ </div><div class="line">RM    := rm -rf </div><div class="line">MKDIR := mkdir -p</div><div class="line">SED   := sed </div><div class="line">MV    := mv</div><div class="line"># init sources & objects & depends</div><div class="line">sources_all := <span class="variable">$(</span>shell find . -name <span class="string">"*.c"</span> -o -name <span class="string">"*.cpp"</span> -o -name <span class="string">"*.h"</span>)</div><div class="line">sources_c   := <span class="variable">$(</span><span class="keyword">filter</span> <span class="variable">%.</span>c, <span class="variable">$(</span>sources_all))</div><div class="line">sources_cpp := <span class="variable">$(</span><span class="keyword">filter</span> <span class="variable">%.</span>cpp, <span class="variable">$(</span>sources_all))</div><div class="line">sources_h   := <span class="variable">$(</span><span class="keyword">filter</span> <span class="variable">%.</span>h, <span class="variable">$(</span>sources_all))</div><div class="line">objs        := <span class="variable">$(</span>addprefix <span class="variable">$(</span>BIN_DIR)/,<span class="variable">$(</span><span class="keyword">strip</span> <span class="variable">$(</span>sources_cpp:.cpp=.o) <span class="variable">$(</span>sources_c:.c=.o)))</div><div class="line">deps        := <span class="variable">$(</span>addprefix <span class="variable">$(</span>BIN_DIR)/,<span class="variable">$(</span><span class="keyword">strip</span> <span class="variable">$(</span>sources_cpp:.cpp=.d) <span class="variable">$(</span>sources_c:.c=.d)))</div><div class="line"># create directory</div><div class="line"><span class="variable">$(</span>foreach <span class="keyword">dirname</span>,<span class="variable">$(</span><span class="keyword">sort</span> <span class="variable">$(</span>dir <span class="variable">$(</span>sources_c) <span class="variable">$(</span>sources_cpp))),\</div><div class="line">  <span class="variable">$(</span>shell <span class="variable">$(</span>MKDIR) <span class="variable">$(</span>BIN_DIR)/<span class="variable">$(</span><span class="keyword">dirname</span>)))</div><div class="line"># complie & link variable</div><div class="line">FLAGS     := <span class="variable">$(</span><span class="keyword">if</span> <span class="variable">$(</span>DEBUG),-g -O, -O2)</div><div class="line">CFLAGS     += <span class="variable">$(</span>addprefix -I ,<span class="variable">$(</span><span class="keyword">sort</span> <span class="variable">$(</span>dir <span class="variable">$(</span>sources_h))))</div><div class="line">CXXFLAGS   := <span class="variable">$(</span><span class="keyword">if</span> <span class="variable">$(</span>DEBUG),-g -O -Wall -std=c++<span class="number">11</span>, -O2 -std=c++<span class="number">11</span>)</div><div class="line">CXXFLAGS     += <span class="variable">$(</span>addprefix -I ,<span class="variable">$(</span><span class="keyword">sort</span> <span class="variable">$(</span>dir <span class="variable">$(</span>sources_h))))</div><div class="line">LDFLAGS    :=</div><div class="line">LOADLIBES  += #-L/usr/include/mysql</div><div class="line">LDLIBS     += #-lpthread -lmysqlclient</div><div class="line"># add vpath</div><div class="line">vpath <span class="variable">%.</span>h <span class="variable">$(</span><span class="keyword">sort</span> <span class="variable">$(</span>dir <span class="variable">$(</span>sources_h)))</div><div class="line">vpath <span class="variable">%.</span>c <span class="variable">$(</span><span class="keyword">sort</span> <span class="variable">$(</span>dir <span class="variable">$(</span>sources_c)))</div><div class="line">vpath <span class="variable">%.</span>cpp <span class="variable">$(</span><span class="keyword">sort</span> <span class="variable">$(</span>dir <span class="variable">$(</span>sources_cpp)))</div><div class="line"># generate depend files</div><div class="line"># actually generate after object generated, beacasue it only used when next make)</div><div class="line">ifneq <span class="string">"$(MAKECMDGOALS)"</span> <span class="string">"clean"</span></div><div class="line">    sinclude <span class="variable">$(</span>deps)</div><div class="line">endif</div><div class="line"># make-depend(depend-<span class="keyword">file</span>,<span class="keyword">source</span>-<span class="keyword">file</span>,object-<span class="keyword">file</span>,cc)</div><div class="line">define make-depend</div><div class="line">  <span class="variable">$(</span>RM) <span class="variable">$1</span>;                                     \</div><div class="line">  <span class="variable">$4</span> <span class="variable">$(</span>CFLAGS) -MM <span class="variable">$2</span> |                         \</div><div class="line">  <span class="variable">$(</span>SED) <span class="string">'s,\($(notdir $3)\): ,$3: ,'</span> &gt; <span class="variable">$1</span>.tmp; \</div><div class="line">  <span class="variable">$(</span>SED) -e <span class="string">'s/#.*//'</span>                           \</div><div class="line">         -e <span class="string">'s/^[^:]*: *//'</span>                     \</div><div class="line">         -e <span class="string">'s/ *\\$$//'</span>                        \</div><div class="line">         -e <span class="string">'/^$$/ d'</span>                           \</div><div class="line">         -e <span class="string">'s/$$/ :/'</span> &lt; <span class="variable">$1</span>.tmp &gt;&gt; <span class="variable">$1</span>.tmp;      \</div><div class="line">  <span class="variable">$(</span>MV) <span class="variable">$1</span>.tmp <span class="variable">$1</span>;</div><div class="line">endef</div><div class="line"># rules to generate objects <span class="keyword">file</span></div><div class="line"><span class="variable">$(</span>BIN_DIR)/<span class="variable">%.</span>o: <span class="variable">%.</span>c</div><div class="line">    <span class="variable">@$</span>(call make-depend,<span class="variable">$(</span>patsubst <span class="variable">%.</span>o,<span class="variable">%.</span>d,<span class="variable">$@</span>),<span class="variable">$&lt;</span>,<span class="variable">$@</span>,<span class="variable">$(</span>CC))</div><div class="line">    <span class="variable">$(</span>CC) <span class="variable">$(</span>CFLAGS) -o <span class="variable">$@</span> -c <span class="variable">$&lt;</span></div><div class="line"><span class="variable">$(</span>BIN_DIR)/<span class="variable">%.</span>o: <span class="variable">%.</span>cpp</div><div class="line">    <span class="variable">@$</span>(call make-depend,<span class="variable">$(</span>patsubst <span class="variable">%.</span>o,<span class="variable">%.</span>d,<span class="variable">$@</span>),<span class="variable">$&lt;</span>,<span class="variable">$@</span>,<span class="variable">$(</span>CXX))</div><div class="line">    <span class="variable">$(</span>CXX) <span class="variable">$(</span>CXXFLAGS) -o <span class="variable">$@</span> -c <span class="variable">$&lt;</span></div><div class="line"># add-target(target,objs,cc)</div><div class="line">define add-target</div><div class="line">  REAL_TARGET += <span class="variable">$(</span>BIN_DIR)/<span class="variable">$1</span></div><div class="line">  <span class="variable">$(</span>BIN_DIR)/<span class="variable">$1</span>: <span class="variable">$2</span></div><div class="line">    <span class="variable">$3</span> <span class="variable">$(</span>LDFLAGS) <span class="variable">$$</span>^ <span class="variable">$(</span>LOADLIBES) <span class="variable">$(</span>LDLIBS) -o <span class="variable">$$</span>@</div><div class="line">endef</div><div class="line"># call add-target</div><div class="line"><span class="variable">$(</span>foreach targ,<span class="variable">$(</span>TARGET_PROG),<span class="variable">$(</span><span class="keyword">eval</span> <span class="variable">$(</span>call add-target,<span class="variable">$(</span>targ),<span class="variable">$(</span>objs),<span class="variable">$(</span>CXX))))</div><div class="line">all: <span class="variable">$(</span>REAL_TARGET) <span class="variable">$(</span>TARGET_LIBS)</div><div class="line">clean: </div><div class="line">    <span class="variable">$(</span>RM) <span class="variable">$(</span>BIN_DIR)</div></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://yoursite.com/2015/04/08/makefile/" data-id="r6zopop8xh0k3aft" class="article-share-link" data-share="baidu">Share</a>
+      
+
+      
+        <a href="http://yoursite.com/2015/04/08/makefile/#ds-thread" class="article-comment-link">Comments</a>
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-Python-function-1" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2015/03/19/Python-function-1/" class="article-date">
@@ -126,63 +173,9 @@
 
 
   
-    <article id="post-Python的属性搜索" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2015/03/19/Python的属性搜索/" class="article-date">
-  <time datetime="2015-03-19T14:22:38.000Z" itemprop="datePublished">Mar 19 2015</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2015/03/19/Python的属性搜索/">Python的属性搜索</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <hr>
-<p>这是我总结的Python属性搜索的<em>加长版</em>，完整的描述了Python在做属性访问时的过程。<br>了解Python属性搜索的整个过程，有助于更深入地理解Python属性访问。</p>
-<hr>
-<h3 id="1-_对Python中属性和方法的看法">1. 对Python中属性和方法的看法</h3>
-<p>理解Python时有一点很重要：<strong>一切皆对象</strong>。<br>为什么呢？<br>先看个例子：</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; class Foo(object):</div><div class="line"><span class="keyword">...</span>    clsattr = <span class="string">'this is class attribute'</span></div><div class="line"><span class="keyword">...</span>    def clsmethod(self):</div><div class="line"><span class="keyword">...</span>        print <span class="string">'this is method'</span></div></pre></td></tr></table></figure>
-
-<p>在这个例子中，定义了<code>class Foo</code>。<br>通常我们称<code>clsattr</code>为<strong>属性</strong>，<code>clsmethod</code>为<strong>方法</strong>。<br>这种叫法容易造成一种误会：认为对于类来说属性和方法是两种东西。<br>其实，由于在Python中一切皆对象，所以，拿上例来说，<code>clsattr</code>是<code>Foo</code>的一个<code>str</code>类型对象，而<code>clsmethod</code>是<code>Foo</code>的一个<code>function</code>类型对象。<br>也就是对于<code>Foo</code>来讲，<code>clsattr</code>和<code>clsmethod</code>都是对象，除了类型不同，其他的没有什么不一样。<br>这是一个看法上的细微区别，但是对后面理解Python的属性搜索却很重要。<br>
-        
-          <p class="article-more-link">
-            <a href="/2015/03/19/Python的属性搜索/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://yoursite.com/2015/03/19/Python的属性搜索/" data-id="3kco4g7avzdg4i1v" class="article-share-link" data-share="baidu">Share</a>
-      
-
-      
-        <a href="http://yoursite.com/2015/03/19/Python的属性搜索/#ds-thread" class="article-comment-link">Comments</a>
-      
-
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
   
     <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><span class="space">&hellip;</span><a class="page-number" href="/page/5/">5</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
     </nav>
   
 </section>
@@ -195,7 +188,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a><span class="tag-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -204,7 +197,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Python/" style="font-size: NaNpx;">Python</a>
+      <a href="/tags/C/" style="font-size: NaNpx;">C++</a><a href="/tags/Python/" style="font-size: NaNpx;">Python</a>
     </div>
   </div>
 
@@ -213,7 +206,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/04/">April 2015</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/03/">March 2015</a><span class="archive-list-count">7</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2015/01/">January 2015</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -223,6 +216,10 @@
     <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
+        
+          <li>
+            <a href="/2015/04/08/makefile/">一个通用的makefile脚本</a>
+          </li>
         
           <li>
             <a href="/2015/03/19/Python-function-1/">Python 函数-函数定义</a>
@@ -238,10 +235,6 @@
         
           <li>
             <a href="/2015/03/19/Python-LEGB规则/">Python-LEGB规则</a>
-          </li>
-        
-          <li>
-            <a href="/2015/03/19/Python-函数参数匹配/">Python-函数参数匹配</a>
           </li>
         
       </ul>
